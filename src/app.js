@@ -4,6 +4,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
+const user = require('./libs/user');
 
 dotenv.config({path: path.join(__dirname, '../.env.local')});
 
@@ -22,18 +23,20 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-const con = mysql.createConnection({
+const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
 });
 
+exports.db = db;
+
 const sessionObjectName = 'userid'
 
 const files = {
-    index: path.join(__dirname, '../public/index.html'),
-    login: path.join(__dirname, '../public/login.html'),
+    index: path.join(__dirname, '../public/pages/index.html'),
+    login: path.join(__dirname, '../public/pages/login.html'),
 }
 
 app.use(express.json({limit: '4mb'}));
@@ -53,12 +56,24 @@ function authMiddleware(req, res, next) {
 }  
 
 app.post('/login', (req, res) => {
-    const {email, password, firstName, lastName, department, role} = req.body;
+    const {email, password} = req.body;
+    user.fetchUser(db, email, password, (err, result) => {
+        if(err || result.length==0){
+            res.redirect('/login?error=Wrong Credentials')
+            return;
+        }
+        if(result.length > 0){
+            req.session[sessionObjectName] = result[0].id;
+            res.redirect('/classroom');
+            return;
+        }
+        res.redirect('/login?error=Error')
+    });
 });
 
 
 app.get('/', (req, res) => {
-    res.sendFile(files.index);
+    res.sendFile(files.login);
 });
 
 app.get('/logout', (req, res) => {
@@ -69,6 +84,10 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
+    if(req.session[sessionObjectName]){
+        res.redirect('/classroom');
+        return;
+    }
     res.sendFile(files.login);
 });
 

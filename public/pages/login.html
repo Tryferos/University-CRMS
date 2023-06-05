@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<script defer src="../scripts/login.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <article class="signin">
+        <header>
+            <h1>Καλώς ορίσατε στο πανεπιστήμιο Αιγαίου.</h1>
+            <h2>Παρακαλώ συμπληρώστε τα στοιχεία σας για να συνδεθείται.</h2>
+        </header>
+        <form action="/login" method="post" class="login">
+            <fieldset>
+                <div>
+                    <label id="basic-lbl" for="Email">Διεύθυνση Email<span aria-label="required">*</span></label>
+                    <input type="email" name="email" id="email"
+                    required
+                    pattern="[a-zA-Z0-9@\.]{4,20}" 
+                    placeholder="Εισάγετε το email σας">
+                </div>
+                <div>
+                    <label id="basic-lbl" for="password">Κωδικός Χρήστη<span aria-label="required">*</span></label>
+                    <input type="password" name="password" id="password" 
+                    required
+                    pattern=".*{8,20}]"
+                    placeholder="Εισάγετε τον κωδικό σας">
+                </div>
+                <input type="checkbox" name="normal" value="true" checked hidden>
+                <button>Συνδεθείται</button>
+            </fieldset>
+        </form>
+        <form action="/merchant" method="get">
+            <button class="btn-sec">Δημιουργία αίτησης εγγραφής</button>
+        </form>
+    </article>
+</body>
+</html>
