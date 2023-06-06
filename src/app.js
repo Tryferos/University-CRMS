@@ -60,12 +60,16 @@ app.post('/login', (req, res) => {
     const {email, password} = req.body;
     user.fetchUser(db, email, password, (err, result) => {
         if(err || result.length==0){
-            res.redirect('/login?error=Wrong Credentials')
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(result[0].approved==0){
+            res.redirect('/login?error_code=502')
             return;
         }
         if(result.length > 0){
             req.session[sessionObjectName] = result[0].id;
-            res.redirect('/classroom');
+            res.redirect('/');
             return;
         }
         res.redirect('/login?error=Error')
@@ -74,7 +78,7 @@ app.post('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
     if(req.session[sessionObjectName]){
-        res.redirect('/classroom');
+        res.redirect('/');
         return;
     }
     res.sendFile(files.register);
@@ -87,14 +91,13 @@ app.post('/register', (req, res) => {
             res.redirect('/register?error_code=500')
             return;
         }
-        req.session[sessionObjectName] = result.insertId;
-        res.redirect('/classroom')
+        res.redirect('/')
     });
 });
 
 
 app.get('/', (req, res) => {
-    res.sendFile(files.login);
+    res.sendFile(files.index);
 });
 
 app.get('/logout', (req, res) => {
