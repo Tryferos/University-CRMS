@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/register.css">
+</head>
+<script defer src="../scripts/register.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <article class="signin">
+        <header>
+            <h1>Καλώς ορίσατε στο πανεπιστήμιο Αιγαίου.</h1>
+            <h2>Παρακαλώ συμπληρώστε τα στοιχεία σας για να δημιουργήσετε αίτηση εγγραφής.</h2>
+        </header>
+        <form action="/register" method="post" enctype="application/x-www-form-urlencoded" class="login">
+            <fieldset>
+                <ul id="fields-list">
+                    <div>
+                        <label id="basic-lbl-email" for="Email">Διεύθυνση Email<span aria-label="required">*</span></label>
+                        <input type="email" name="email" id="email"
+                        required
+                        pattern="[a-zA-Z0-9@\.]{4,40}" 
+                        placeholder="Εισάγετε το email σας">
+                    </div>
+                    <div>
+                        <label id="basic-lbl" for="password">Κωδικός Χρήστη<span aria-label="required">*</span></label>
+                        <input type="password" name="password" id="password" 
+                        required
+                        pattern=".*{6,40}]"
+                        placeholder="Εισάγετε τον κωδικό σας">
+                    </div>
+                    <div>
+                        <label id="basic-lbl" for="first_name">Όνομα<span aria-label="required">*</span></label>
+                        <input type="text" name="first_name" id="first_name" 
+                        required
+                        pattern=".*{8,28}]"
+                        placeholder="Εισάγετε το όνομα σας">
+                    </div>
+                    <div>
+                        <label id="basic-lbl" for="last_name">Επίθετο<span aria-label="required">*</span></label>
+                        <input type="text" name="last_name" id="last_name" 
+                        required
+                        pattern=".*{8,48}]"
+                        placeholder="Εισάγετε το επίθετο σας">
+                    </div>
+                    <div>
+                        <label id="basic-lbl" for="department">Τμήμα<span aria-label="required">*</span></label>
+                        <select name="department" id="department" class="dropdown">
+                            <option value="1" name="1">Τμήμα Μηχανικών Πληροφοριακών και Επικοινωνιακών Συστημάτων</option>
+                            <option name="5" value="5">Τμήμα Στατιστικής και Αναλογιστικών – Χρηματοοικονομικών Μαθηματικών</option>
+                            <option name="6" value="6">Τμήμα Μαθηματικών</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="basic-lbl" for="role">Ρόλος<span aria-label="required">*</span></label>
+                        <ul name="role" id="role">
+                            <label for="professor">Διδάσκων</label>
+                            <input type="checkbox" name="professor" value="true" id="professor" >
+                            <label for="reserve_admin">Διαχειριστής Κρατήσεων</label>
+                            <input type="checkbox" value="true"  name="reserve_admin" id="reserve_admin" >
+                            <label for="user_admin">Διαχειριστής Χρηστών</label>
+                            <input type="checkbox" value="true"  name="user_admin" id="user_admin" >
+                        </ul>
+                    </div>
+                </ul>
+                <button>Αποστολή αίτησης</button>
+            </fieldset>
+        </form>
+        <form action="/login" method="get">
+            <button class="btn-sec">Συνδεθείται</button>
+        </form>
+    </article>
+</body>
+</html>

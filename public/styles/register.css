@@ -1,0 +1,173 @@
+
+.signin header{
+    text-align: center;
+    padding: 5rem clamp(1rem, 10%, 5rem);
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.65rem;
+    color: var(--var-primary)
+}
+
+.login fieldset{
+    border: none;
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.75rem;
+    align-items: center;
+}
+
+.login fieldset ul{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 1.75rem;
+    padding: 0px;
+}
+
+span#error-msg{
+    font-size:0.8rem;
+    color: red;
+}
+
+.dropdown{
+    padding: 14px 44px 14px 18px;
+    outline: 1px solid #ccc;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('../images/arrow-down.png') no-repeat 97% 50% #ffffff;
+    appearance: none;
+    background-size: 32px 27px;
+}
+
+#role{
+    outline: 1px solid #ccc;
+    padding: 14px 18px;
+    border-radius: 4px;
+}
+
+#role > label{
+    font-size: .9rem;
+}
+
+#role > input{
+    outline: none;
+    cursor: pointer;
+    transform: scale(1.25);
+    accent-color: var(--var-secondary);
+}
+
+.dropdown:focus{
+    outline-color: #868383;
+}
+
+.login{
+    width: clamp(300px, 70%, 1000px);
+}
+
+body > article{
+    margin-top: 75px;
+}
+
+.login fieldset div{
+    border: none;
+    padding: 0rem;
+    display: flex;
+    min-width: 300px;
+    flex-direction: column;
+    gap: 4px;
+}
+.login fieldset div input{
+    padding: 14px 18px;
+    border-radius: 4px;
+    outline: 1px solid #ccc;
+    border: none;
+}
+
+header > h1{
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--var-primary);
+}
+.login fieldset div input:focus{
+    border: none;
+    outline: 1px solid #868383;
+}
+.login fieldset div label{
+    font-size: 0.7em;
+}
+
+.btn-sec{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 10px 16px;
+    color: var(--var-primary);
+}
+
+.btn-sec:hover{
+    text-decoration: underline;
+}
+
+input::placeholder{
+}
+
+.navbar{
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    justify-content: flex;
+    align-items: center;
+}
+
+.navbar > div{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    padding: 0px 75px;
+    align-items: center;
+}
+
+
+.signin .login button{
+    padding: 14px 18px;
+    border-radius: 4px;
+    width: 300px;
+    outline: 1px solid #ccc;
+    border: none;
+    background-color: var(--var-secondary);
+    color: white;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.signin .login button:hover{
+    background-color: var(--var-secondary);
+    opacity: 0.8;
+}
+
+.signin header h2{
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.signin{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}

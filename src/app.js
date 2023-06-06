@@ -37,6 +37,7 @@ const sessionObjectName = 'userid'
 const files = {
     index: path.join(__dirname, '../public/pages/index.html'),
     login: path.join(__dirname, '../public/pages/login.html'),
+    register: path.join(__dirname, '../public/pages/register.html'),
 }
 
 app.use(express.json({limit: '4mb'}));
@@ -48,7 +49,7 @@ app.use(authMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
-    const excludedPaths = ['/login', '/', '/classroom', '/logout']
+    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register']
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query)) {
         return res.status(500).send({error: 'Not logged in'})
     }
@@ -68,6 +69,26 @@ app.post('/login', (req, res) => {
             return;
         }
         res.redirect('/login?error=Error')
+    });
+});
+
+app.get('/register', (req, res) => {
+    if(req.session[sessionObjectName]){
+        res.redirect('/classroom');
+        return;
+    }
+    res.sendFile(files.register);
+});
+
+app.post('/register', (req, res) => {
+    const body = req.body;
+    user.insertUser(db, body, (err, result) => {
+        if(err){
+            res.redirect('/register?error_code=500')
+            return;
+        }
+        req.session[sessionObjectName] = result.insertId;
+        res.redirect('/classroom')
     });
 });
 
