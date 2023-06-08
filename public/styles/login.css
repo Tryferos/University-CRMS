@@ -27,7 +27,7 @@
 }
 
 body > article{
-    margin-top: 75px;
+    margin-top: 25px;
 }
 
 .login fieldset div{
@@ -70,26 +70,6 @@ header > h1{
 }
 
 input::placeholder{
-}
-
-.navbar{
-    position: fixed;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    height: 100px;
-    border-bottom: 1px solid #ccc;
-    font-size: 1rem;
-    justify-content: flex;
-    align-items: center;
-}
-
-.navbar > div{
-    width: 80%;
-    height: 100%;
-    display: flex;
-    padding: 0px 75px;
-    align-items: center;
 }
 
 

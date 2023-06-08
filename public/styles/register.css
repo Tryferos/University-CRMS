@@ -10,7 +10,6 @@
 
 .login fieldset{
     border: none;
-    padding: 1rem;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -73,14 +72,14 @@ span#error-msg{
 }
 
 body > article{
-    margin-top: 75px;
+    margin-top: 25px;
 }
 
 .login fieldset div{
     border: none;
     padding: 0rem;
     display: flex;
-    min-width: 300px;
+    min-width: 200px;
     flex-direction: column;
     gap: 4px;
 }
@@ -119,26 +118,30 @@ header > h1{
 input::placeholder{
 }
 
-.navbar{
-    position: fixed;
+body{
     width: 100vw;
-    top: 0;
-    left: 0;
-    height: 100px;
-    border-bottom: 1px solid #ccc;
-    font-size: 1rem;
-    justify-content: flex;
-    align-items: center;
 }
 
-.navbar > div{
-    width: 80%;
-    height: 100%;
-    display: flex;
-    padding: 0px 75px;
-    align-items: center;
+@media screen and (max-width: 865px){
+    .login fieldset ul{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .login fieldset div{
+        width: 100%;
+        min-width: none;
+    }
+    fieldset{
+        width: 100%;
+        min-width: 10px;
+    }
+    .login{
+        width: 100%;
+        padding: 0px 36px;
+    }
 }
-
+    
 
 .signin .login button{
     padding: 14px 18px;
