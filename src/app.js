@@ -38,6 +38,10 @@ const files = {
     index: path.join(__dirname, '../public/pages/index.html'),
     login: path.join(__dirname, '../public/pages/login.html'),
     register: path.join(__dirname, '../public/pages/register.html'),
+    admin: {
+        reservations: path.join(__dirname, '../public/pages/admin/reservations.html'),
+        users: path.join(__dirname, '../public/pages/admin/users.html'),
+    }
 }
 
 app.use(express.json({limit: '4mb'}));
@@ -46,15 +50,71 @@ app.use(cookieParser());
 app.use(express.urlencoded({limit: '4mb', extended: true}));
 
 app.use(authMiddleware);
+app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
     const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register']
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query)) {
-        return res.status(500).send({error: 'Not logged in'})
+        // return res.status(500).send({error: 'Not logged in'})
+        res.redirect('/login?error_code=500')
+        return;
     }
     next();
 }  
+
+function adminMiddleware(req, res, next){
+    const path = req.path.toLowerCase();
+    if(!path.startsWith('/admin')){
+        return next();
+    }
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        const user = result[0];
+        if(err || (user.user_admin!=1 && user.reserve_admin!=1) ){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin/users') && user.user_admin!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin/reservations') && user.reserve_admin!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin/fetch-users') && user.user_admin!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin/application') && user.user_admin!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin/delete-user') && user.user_admin!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        next();
+    });
+}
+
+app.get('/admin/fetch-users/:approval', (req, res) => {
+    user.fetchUsers(db, req.session[sessionObjectName], req.params.approval,(err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+});
+
+
+app.get('/admin/reservations', (req, res) => {
+    res.sendFile(files.admin.reservations);
+});
+app.get('/admin/users', (req, res) => {
+    res.sendFile(files.admin.users);
+});
 
 app.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -82,6 +142,37 @@ app.get('/register', (req, res) => {
         return;
     }
     res.sendFile(files.register);
+});
+
+app.post('/admin/delete-user', (req, res) => {
+    const id = req.body.id;
+    if(!id){
+        res.status(500).send({error: 'Error'})
+        return;
+    }
+    user.deleteUser(db, id, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send({success: true});
+    });
+})
+
+app.post('/admin/application', (req, res) => {
+    const {id, approval} = req.body;
+    if(!id || (approval!=0 && approval!=1)){
+        res.status(500).send({error: 'Error'})
+        return;
+    }
+    user.updateUser(db, id, approval, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send({success: true});
+    });
+
 });
 
 app.post('/register', (req, res) => {
