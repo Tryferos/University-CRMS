@@ -17,6 +17,7 @@
     width: 100%;
 }
 
+
 #basic-lbl > span#error-msg{
     font-size:0.8rem;
     color: red;
@@ -43,18 +44,18 @@ body > article{
     outline: 1px solid #ccc;
     border: none;
 }
-
-header > h1{
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--var-primary);
-}
 .login fieldset div input:focus{
     border: none;
     outline: 1px solid #868383;
 }
 .login fieldset div label{
     font-size: 0.7em;
+}
+
+header > h1{
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--var-primary);
 }
 
 .btn-sec{
@@ -76,10 +77,10 @@ input::placeholder{
 .signin .login button{
     padding: 14px 18px;
     border-radius: 4px;
-    outline: 1px solid #ccc;
+    outline: 1.5px solid var(--var-secondary);
     border: none;
-    background-color: var(--var-secondary);
-    color: white;
+    background-color: #fff;
+    color: var(--var-secondary);
     font-size: 1em;
     font-weight: 500;
     cursor: pointer;
@@ -87,7 +88,7 @@ input::placeholder{
 
 .signin .login button:hover{
     background-color: var(--var-secondary);
-    opacity: 0.8;
+    color: #fff;
 }
 
 .signin header h2{

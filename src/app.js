@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const user = require('./libs/user');
+const reservation = require('./libs/reservation');
 
 dotenv.config({path: path.join(__dirname, '../.env.local')});
 
@@ -39,7 +40,12 @@ const files = {
     login: path.join(__dirname, '../public/pages/login.html'),
     register: path.join(__dirname, '../public/pages/register.html'),
     admin: {
-        reservations: path.join(__dirname, '../public/pages/admin/reservations.html'),
+        reservations: {
+            index: path.join(__dirname, '../public/pages/admin/reservations.html'),
+            classroom: path.join(__dirname, '../public/pages/admin/classroom.html'),
+            reservation: path.join(__dirname, '../public/pages/admin/reservation.html'),
+            lecture: path.join(__dirname, '../public/pages/admin/lecture.html'),
+        },
         users: path.join(__dirname, '../public/pages/admin/users.html'),
     }
 }
@@ -108,9 +114,33 @@ app.get('/admin/fetch-users/:approval', (req, res) => {
     });
 });
 
+app.get('/admin/fetch-substitutions', (req, res) => {
+
+})
+
+app.get('/admin/reservations/classroom', (req, res) => {
+    res.sendFile(files.admin.reservations.classroom);
+});
+app.post('/admin/reservations/classroom', (req, res) => {
+    console.log(req.body);
+    reservation.insertClassroom(db, req.body, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.redirect('/admin/reservations')
+    });
+});
+app.get('/admin/reservations/lecture', (req, res) => {
+    res.sendFile(files.admin.reservations.lecture);
+});
+app.get('/admin/reservations/reservation', (req, res) => {
+    res.sendFile(files.admin.reservations.reservation);
+});
+
 
 app.get('/admin/reservations', (req, res) => {
-    res.sendFile(files.admin.reservations);
+    res.sendFile(files.admin.reservations.index);
 });
 app.get('/admin/users', (req, res) => {
     res.sendFile(files.admin.users);
@@ -144,7 +174,7 @@ app.get('/register', (req, res) => {
     res.sendFile(files.register);
 });
 
-app.get('/admin/fetch-department', (req, res) => {
+app.get('/fetch-department', (req, res) => {
     user.fetchDepartment(db, req.session[sessionObjectName],(err, result) => {
         if(err){
             res.status(500).send({error: 'Error'})

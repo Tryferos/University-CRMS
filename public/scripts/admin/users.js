@@ -6,7 +6,7 @@ window.addEventListener('load', async(ev) => {
         await populateApplicationsTable(data);
     });
     const department = document.getElementById('department');
-    department.innerText = (await fetchFromServer('admin/fetch-department'))[0].department;
+    department.innerText = (await fetchFromServer('fetch-department'))[0].department;
 });
 
 async function populateUsersTable(users){
@@ -64,7 +64,7 @@ async function populateApplicationsTable(users){
         <th>Αποδοχή</th>
         <th>Απόρριψη</th>
         <th>Δημιουργία</th>
-    `;
+    `; 
     table.appendChild(tr);
     users.forEach((user) => {
         const tr = document.createElement('tr');

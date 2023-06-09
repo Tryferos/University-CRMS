@@ -1,0 +1,119 @@
+form fieldset div{
+    border: none;
+    padding: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+form fieldset div input{
+    padding: 14px 18px;
+    border-radius: 4px;
+    outline: 1px solid #ccc;
+    border: none;
+}
+form fieldset div input:focus{
+    border: none;
+    outline: 1px solid #868383;
+}
+form fieldset div label{
+    font-size: 0.7em;
+}
+
+form > fieldset{
+    border: none;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(236px, 1.5fr));
+    gap: 1.75rem;
+    width: clamp(300px, 90%, 1200px);
+}
+
+form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    align-items: center;
+    margin-top: 75px;
+}
+
+ul{
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(106px, 1.5fr));
+    margin: 0;
+    padding: 0;
+}
+
+#hourly_availability{
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1.5fr));
+}
+.btn-sec{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 4px 16px;
+    color: var(--var-primary);
+}
+
+.btn-sec:hover{
+    text-decoration: underline;
+}
+.btn{
+    padding: 14px 18px;
+    border-radius: 4px;
+    outline: 1.5px solid var(--var-secondary);
+    border: none;
+    background-color: #fff;
+    color: var(--var-secondary);
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: var(--var-secondary);
+    color: #fff;
+}
+
+#weekly_availability > li > label,
+#hourly_availability > li > label{
+    font-size: 1em;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+#weekly_availability > li > input,
+#hourly_availability > li > input{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    scale: 1.15;
+    accent-color: var(--var-secondary);
+}
+
+
+body{
+    width: 100vw;
+}
+
+#pc-count{
+    display: none;
+}
+#basic-lbl > span#error-msg{
+    font-size:0.8rem;
+    color: red;
+}
+select{
+    outline: none;
+    border: none;
+}
+.dropdown{
+    padding: 14px 18px;
+    outline: 1px solid #ccc;
+    border-radius: 4px;
+}
+.dropdown:focus{
+    padding: 14px 18px;
+    outline: 1px solid #868383;
+}

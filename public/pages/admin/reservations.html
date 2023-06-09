@@ -7,9 +7,28 @@
     <title>Document</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/navbar.css">
+    <link rel="stylesheet" href="../styles/admin/reservations.css">
+    <link rel="stylesheet" href="../styles/table.css">
 </head>
+<script src="../../scripts/global.js"></script>
+<script src="../../scripts/admin/reservations.js"></script>
 <body>
     <nav class="navbar"></nav>
-    
+    <article>
+        <ul>
+            <form method="get" action="/admin/reservations/reservation">
+                <button class="btn">Δημιουργία κράτησης</button>
+            </form>
+            <form method="get" action="/admin/reservations/lecture">
+                <button class="btn">Δημιουργία διδασκαλίας</button>
+            </form>
+            <form method="get" action="/admin/reservations/classroom">
+                <button class="btn">Δημιουργία αίθουσας</button>
+            </form>
+        </ul>
+        <table class="table">
+
+        </table>
+    </article>
 </body>
 </html>

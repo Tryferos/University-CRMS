@@ -1,4 +1,3 @@
-const db = require('../app').db;
 
 const fetchUser = (
     db,

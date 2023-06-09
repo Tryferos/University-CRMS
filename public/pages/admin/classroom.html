@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../styles/global.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/admin/creation.css">
+    <title>Document</title>
+</head>
+<script src="../../scripts/global.js"></script>
+<script src="../../scripts/admin/classroom.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <form action="/admin/reservations/classroom" method="post">
+        <h1>Δημιουργία Αίθουσας</h1>
+        <fieldset>
+            <div>
+                <label id="basic-lbl" for="name">Όνομα αίθουσας<span aria-label="required">*</span></label>
+                <input required type="text" id="name" name="name" 
+                placeholder="Εισάγεται το όνομα της αίθουσας"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="building">Όνομα κτιρίου<span aria-label="required">*</span></label>
+                <input required type="text" id="building" name="building" 
+                placeholder="Εισάγεται το όνομα του κτηρίου"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="address">Διεύθυνση κτιρίου<span aria-label="required">*</span></label>
+                <input required type="text" id="address" name="address" 
+                placeholder="Εισάγεται την διεύθυνση του κτηρίου"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="capacity">Χωρητικότητα αίθουσας<span aria-label="required">*</span></label>
+                <input required value="60" min="0" type="number" id="capacity" name="capacity" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="capacity">Τύπος αίθουσας<span aria-label="required">*</span></label>
+                <select name="type" class="dropdown" onchange="handleTypeChange(event)">
+                    <option value="Διδασκαλία">Διδασκαλία</option>
+                    <option value="Εργαστήριο">Εργαστήριο</option>
+                </select>
+            </div>
+            <div id="pc-count">
+                <label id="basic-lbl" for="pc_count">Αριθμός υπολογιστών<span aria-label="required">*</span></label>
+                <input value="12" min="0" type="number" id="pc_count" name="pc_count" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="projector">Προτζέκτορας<span aria-label="required">*</span></label>
+                <select id="projector" name="projector" class="dropdown">
+                    <option value="1">ΝΑΙ</option>
+                    <option value="0">ΟΧΙ</option>
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="always_locked">Πάντοτε ανοικτή<span aria-label="required">*</span></label>
+                <select id="always_locked" name="always_locked" class="dropdown">
+                    <option value="1">ΝΑΙ</option>
+                    <option value="0">ΟΧΙ</option>
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="weekly_availability">Εβδομαδιαία Διαθεσιμότητα<span aria-label="required">*</span></label>
+                <ul id="weekly_availability">
+
+                </ul>
+            </div>
+            <div>
+                <label id="basic-lbl" for="hourly_availability">Ωριαία Διαθεσιμότητα<span aria-label="required">*</span></label>
+                <ul id="hourly_availability">
+
+                </ul>
+            </div>
+        </fieldset>
+        <button class="btn">Δημιουργία αίθουσας</button>
+        <button onclick="handleBack(event)" class="btn-sec">Πήγαινε πίσω</button>
+    </form>
+</body>
+</html>

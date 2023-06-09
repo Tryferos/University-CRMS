@@ -146,11 +146,10 @@ body{
 .signin .login button{
     padding: 14px 18px;
     border-radius: 4px;
-    width: 300px;
-    outline: 1px solid #ccc;
+    outline: 1.5px solid var(--var-secondary);
     border: none;
-    background-color: var(--var-secondary);
-    color: white;
+    background-color: #fff;
+    color: var(--var-secondary);
     font-size: 1em;
     font-weight: 500;
     cursor: pointer;
@@ -158,7 +157,7 @@ body{
 
 .signin .login button:hover{
     background-color: var(--var-secondary);
-    opacity: 0.8;
+    color: #fff;
 }
 
 .signin header h2{
