@@ -144,6 +144,16 @@ app.get('/register', (req, res) => {
     res.sendFile(files.register);
 });
 
+app.get('/admin/fetch-department', (req, res) => {
+    user.fetchDepartment(db, req.session[sessionObjectName],(err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+})
+
 app.post('/admin/delete-user', (req, res) => {
     const id = req.body.id;
     if(!id){

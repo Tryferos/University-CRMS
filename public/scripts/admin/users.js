@@ -1,10 +1,12 @@
-window.addEventListener('load', (ev) => {
+window.addEventListener('load', async(ev) => {
     fetchFromServer('admin/fetch-users/1').then(async(data) => {
         await populateUsersTable(data);
     });
     fetchFromServer('admin/fetch-users/0').then(async(data) => {
         await populateApplicationsTable(data);
     });
+    const department = document.getElementById('department');
+    department.innerText = (await fetchFromServer('admin/fetch-department'))[0].department;
 });
 
 async function populateUsersTable(users){
@@ -28,17 +30,17 @@ async function populateUsersTable(users){
     users.forEach((user) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${user.email}</td>
-            <td>${user.first_name}</td>
-            <td>${user.last_name}</td>
-            <td>${user.department}</td>
+            <td title='${user.email}'>${user.email}</td>
+            <td title='${user.first_name}'>${user.first_name}</td>
+            <td title='${user.last_name}'>${user.last_name}</td>
+            <td title='${user.department}'>${user.department}</td>
             <td>${user.professor==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.user_admin==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.reserve_admin==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.professor==1 ? user.professor_role : '-'}</td>
-            <td><button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button></td>
-            <td><button class="btn btn-danger" onclick="editUser(${user.id})">Edit</button></td>
-            <td>${user.date}</td>
+            <td><button class="btn" onclick="deleteUser(${user.id})">Διαγραφή</button></td>
+            <td><button class="btn" onclick="editUser(${user.id})">Επεξεργασία</button></td>
+            <td>${msToDate(Date.parse(user.date))}</td>
         `;
         table.appendChild(tr);
     });
@@ -67,16 +69,16 @@ async function populateApplicationsTable(users){
     users.forEach((user) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${user.email}</td>
-            <td>${user.first_name}</td>
-            <td>${user.last_name}</td>
-            <td>${user.department}</td>
+        <td title='${user.email}'>${user.email}</td>
+        <td title='${user.first_name}'>${user.first_name}</td>
+        <td title='${user.last_name}'>${user.last_name}</td>
+        <td title='${user.department}'>${user.department}</td>
             <td>${user.professor==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.user_admin==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.reserve_admin==1 ? 'Ναι' : 'Όχι'}</td>
             <td>${user.professor==1 ? user.professor_role : '-'}</td>
-            <td><button class="btn btn-danger" onclick="updateApplication(${user.id}, ${1})">Accept</button></td>
-            <td><button class="btn btn-danger" onclick="updateApplication(${user.id}, ${0})">Reject</button></td>
+            <td><button class="btn" onclick="updateApplication(${user.id}, ${1})">Αποδοχή</button></td>
+            <td><button class="btn" onclick="updateApplication(${user.id}, ${0})">Απόρριψη</button></td>
             <td>${msToDate(Date.parse(user.date))}</td>
         `;
         table.appendChild(tr);

@@ -90,3 +90,15 @@ const deleteUser = (
 }
 
 exports.deleteUser = deleteUser;
+
+const fetchDepartment = (
+    db,
+    id,
+    callback,
+) => {
+    db.query(
+        `select d.title as department from uni.user s, uni.departments d where s.id = ? and s.department = d.id`, [id], callback
+    )
+}
+
+exports.fetchDepartment = fetchDepartment;
