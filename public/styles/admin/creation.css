@@ -76,20 +76,26 @@ ul{
     color: #fff;
 }
 
-#weekly_availability > li > label,
-#hourly_availability > li > label{
+.list > li > label{
     font-size: 1em;
     margin-left: 8px;
     cursor: pointer;
 }
 
-#weekly_availability > li > input,
-#hourly_availability > li > input{
+.list > li > input{
     cursor: pointer;
     border: none;
     outline: none;
     scale: 1.15;
     accent-color: var(--var-secondary);
+}
+
+#professors{
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(156px, 1.5fr));
+    margin: 0;
+    padding: 0;
 }
 
 

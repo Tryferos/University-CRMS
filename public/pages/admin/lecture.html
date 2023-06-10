@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../styles/global.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/admin/creation.css">
+    <title>Document</title>
+</head>
+<script src="../../scripts/global.js"></script>
+<script src="../../scripts/admin/lecture.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <form action="/admin/reservations/lecture" method="post">
+        <h1>Δημιουργία Διδασκαλίας</h1>
+        <fieldset>
+            <div>
+                <label id="basic-lbl" for="name">Όνομα μαθήματος<span aria-label="required">*</span></label>
+                <input required type="text" id="name" name="name" 
+                placeholder="Εισάγεται το όνομα της διδασκαλίας"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="code">Κωδικός μαθήματος<span aria-label="required">*</span></label>
+                <input required type="text" id="code" name="code" 
+                placeholder="Εισάγεται τον κωδικό διδασκαλίας"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="type">Είδος μαθήματος<span aria-label="required">*</span></label>
+                <select id="type" name="type" class="dropdown">
+                    <option value="Θεωρία">Θεωρία</option>
+                    <option value="Εργαστήριο">Εργαστήριο</option>
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="semester">Εξάμηνο<span aria-label="required">*</span></label>
+                <input value="6" min="1" max="10" type="number" id="semester" name="semester" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="lecture_hours">Ώρες διδασκαλίας<span aria-label="required">*</span></label>
+                <input value="4" min="1" type="number" id="lecture_hours" name="lecture_hours" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="department">Τμήμα<span aria-label="required">*</span></label>
+                <select name="department" id="department" class="dropdown">
+                    <option value="1" name="1">Τμήμα Μηχανικών Πληροφοριακών και Επικοινωνιακών Συστημάτων</option>
+                    <option name="5" value="5">Τμήμα Στατιστικής και Αναλογιστικών – Χρηματοοικονομικών Μαθηματικών</option>
+                    <option name="6" value="6">Τμήμα Μαθηματικών</option>
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="professors">Διδάσκοντες<span aria-label="required">*</span></label>
+                <ul class="list" id="professors">
+
+                </ul>
+            </div>
+        </fieldset>
+        <button class="btn">Δημιουργία διδασκαλίας</button>
+        <button onclick="handleBack(event)" class="btn-sec">Πήγαινε πίσω</button>
+    </form>
+</body>
+</html>

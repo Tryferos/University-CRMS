@@ -76,7 +76,11 @@ function adminMiddleware(req, res, next){
     }
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         const user = result[0];
-        if(err || (user.user_admin!=1 && user.reserve_admin!=1) ){
+        if(err || (user.user_admin!=1 && user.reserve_admin!=1) || user.approved!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if(path.includes('/admin') && user.user_admin!=1 && user.reserve_admin!=1){
             res.redirect('/login?error_code=500')
             return;
         }
@@ -88,23 +92,11 @@ function adminMiddleware(req, res, next){
             res.redirect('/login?error_code=500')
             return;
         }
-        if(path.includes('/admin/fetch-users') && user.user_admin!=1){
-            res.redirect('/login?error_code=500')
-            return;
-        }
-        if(path.includes('/admin/application') && user.user_admin!=1){
-            res.redirect('/login?error_code=500')
-            return;
-        }
-        if(path.includes('/admin/delete-user') && user.user_admin!=1){
-            res.redirect('/login?error_code=500')
-            return;
-        }
         next();
     });
 }
 
-app.get('/admin/fetch-users/:approval', (req, res) => {
+app.get('/admin/users/fetch-users/:approval', (req, res) => {
     user.fetchUsers(db, req.session[sessionObjectName], req.params.approval,(err, result) => {
         if(err){
             res.status(500).send({error: 'Error'})
@@ -114,7 +106,7 @@ app.get('/admin/fetch-users/:approval', (req, res) => {
     });
 });
 
-app.get('/admin/fetch-substitutions', (req, res) => {
+app.get('/admin/reservations/fetch-substitutions', (req, res) => {
 
 })
 
@@ -122,7 +114,6 @@ app.get('/admin/reservations/classroom', (req, res) => {
     res.sendFile(files.admin.reservations.classroom);
 });
 app.post('/admin/reservations/classroom', (req, res) => {
-    console.log(req.body);
     reservation.insertClassroom(db, req.body, (err, result) => {
         if(err){
             res.status(500).send({error: 'Error'})
@@ -134,6 +125,18 @@ app.post('/admin/reservations/classroom', (req, res) => {
 app.get('/admin/reservations/lecture', (req, res) => {
     res.sendFile(files.admin.reservations.lecture);
 });
+
+app.post('/admin/reservations/lecture', (req, res) => {
+    console.log(req.body);
+    reservation.insertLecture(db, req.body, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.redirect('/admin/reservations')
+    });
+});
+
 app.get('/admin/reservations/reservation', (req, res) => {
     res.sendFile(files.admin.reservations.reservation);
 });
@@ -184,7 +187,17 @@ app.get('/fetch-department', (req, res) => {
     });
 })
 
-app.post('/admin/delete-user', (req, res) => {
+app.get('/admin/reservations/fetch-professors', (req, res) => {
+    reservation.fetchProfessors(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+})
+
+app.post('/admin/users/delete-user', (req, res) => {
     const id = req.body.id;
     if(!id){
         res.status(500).send({error: 'Error'})
@@ -199,7 +212,7 @@ app.post('/admin/delete-user', (req, res) => {
     });
 })
 
-app.post('/admin/application', (req, res) => {
+app.post('/admin/users/application', (req, res) => {
     const {id, approval} = req.body;
     if(!id || (approval!=0 && approval!=1)){
         res.status(500).send({error: 'Error'})
