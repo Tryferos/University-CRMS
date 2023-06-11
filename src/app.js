@@ -107,8 +107,30 @@ app.get('/admin/users/fetch-users/:approval', (req, res) => {
 });
 
 app.get('/admin/reservations/fetch-substitutions', (req, res) => {
+    reservation.fetchSubstitutions(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
 
 })
+
+app.post('/admin/reservations/update-status', (req, res) => {
+    const {ids, status, reason} = req.body;
+    if(!ids || !status){
+        res.status(500).send({error: 'Error'})
+        return;
+    }
+    reservation.updateStatus(db, ids, status, reason, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send({success: true});
+    });
+});
 
 app.get('/admin/reservations/fetch-classrooms', (req, res) => {
     reservation.fetchClassrooms(db, (err, result) => {
@@ -165,7 +187,13 @@ app.get('/admin/reservations/reservation', (req, res) => {
     res.sendFile(files.admin.reservations.reservation);
 });
 app.post('/admin/reservations/reservation', (req, res) => {
-    console.log(req.body)
+    reservation.insertReservation(db, req.body, (err, result) => {
+        if(err){
+            res.redirect('/admin/reservations/reservation?error_code=504')
+            return;
+        }
+        res.redirect('/admin/reservations')
+    });
 });
 
 

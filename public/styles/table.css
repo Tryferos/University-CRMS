@@ -12,6 +12,12 @@
     background-color: #e4e4e4;
 }
 
+td > input[type='checkbox']{
+    scale: 1.5;
+    accent-color: var(--var-secondary);
+    cursor: pointer;
+}
+
 .table tr:nth-child(even){
     background-color: #f2f2f2;
 }
@@ -33,6 +39,16 @@
 .table-wrapper > h1{
     color: var(--var-secondary);
     font-size: 1.25rem;
+}
+
+td[data-status='Εκκρεμούσα']{
+    color: gray;
+}
+td[data-status='Εγκεκριμένη']{
+    color: green;
+}
+td[data-status='Μη Εγκεκριμένη']{
+    color: red;
 }
 
 .table td{

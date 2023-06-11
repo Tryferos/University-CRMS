@@ -16,12 +16,12 @@
         <h1>Δημιουργία Κράτησης</h1>
         <fieldset>
             <div>
-                <label id="basic-lbl" for="start_date">Έναρξη Κράτησης<span aria-label="required">*</span></label>
+                <label id="" for="start_date">Έναρξη Κράτησης<span aria-label="required">*</span></label>
                 <input required type="date" id="start_date" name="start_date" 
                 placeholder="Εισάγεται την ημερομηνία της αρχής"/>
             </div>
             <div>
-                <label id="basic-lbl" for="end_date">Τέλος Κράτησης<span aria-label="required">*</span></label>
+                <label id="" for="end_date">Τέλος Κράτησης<span aria-label="required">*</span></label>
                 <input required type="date" id="end_date" name="end_date" 
                 placeholder="Εισάγεται την ημερομηνία του τέλους"/>
             </div>
@@ -31,7 +31,7 @@
                 </select>
             </div>
             <div>
-                <label id="basic-lbl" for="duration_minutes">Διάρκεια κράτησης σε λεπτά<span aria-label="required">*</span></label>
+                <label id="" for="duration_minutes">Διάρκεια κράτησης σε λεπτά<span aria-label="required">*</span></label>
                 <input value="120" min="1" type="number" id="duration_minutes" name="duration_minutes" />
             </div>
             <div>
@@ -40,7 +40,7 @@
                 </select>
             </div>
             <div>
-                <label id="basic-lbl" for="lid">Διαθέσιμες διδασκαλίες<span aria-label="required">*</span></label>
+                <label id="" for="lid">Διαθέσιμες διδασκαλίες<span aria-label="required">*</span></label>
                 <select onchange="handleLectureChange(event)" id="lid" name="lid" class="dropdown">
                 </select>
             </div>
@@ -51,15 +51,15 @@
             </div>
         </fieldset>
         <div class="details-wrapper">
-            <div class="details" id="details-c">
-                <label id="basic-lbl" for="classroom-details">Λεπτομέρειες επιλεγμένης αίθουσας</label>
-                <details id="classroom-details" open>
+            <div class="details" id="details-l">
+                <label id="" for="lecture-details">Λεπτομέρειες επιλεγμένης διδασκαλίας</label>
+                <details open id="lecture-details">
     
                 </details>
             </div>
-            <div class="details" id="details-l">
-                <label id="basic-lbl" for="lecture-details">Λεπτομέρειες επιλεγμένης διδασκαλίας</label>
-                <details open id="lecture-details">
+            <div class="details" id="details-c">
+                <label id="" for="classroom-details">Λεπτομέρειες επιλεγμένης αίθουσας</label>
+                <details id="classroom-details" open>
     
                 </details>
             </div>

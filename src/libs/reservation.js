@@ -4,9 +4,13 @@ const fetchSubstitutions = (
     callback,
 ) => {
     db.query(
-        `select * from uni.substitution`, callback
+        `select s.id, s.creation_date, s.status, s.hour, s.duration_minutes, s.substitution_date, c.building, c.name as classroom_name, c.address, 
+        l.name as lecture_name, l.code 
+        from uni.substitution s, uni.reservation r, uni.classroom c, uni.lecture l, uni.departments d  where s.cid=c.id and s.rid=r.id and l.id=r.lid and d.id=l.department`, callback
     )
 }
+
+exports.fetchSubstitutions = fetchSubstitutions;
 
 const insertClassroom = (
     db,
@@ -114,3 +118,34 @@ const fetchLectures = (
 }
 
 exports.fetchLectures = fetchLectures;
+
+const insertReservation = (
+    db,
+    body,
+    callback,
+) => {
+    const creation_date = new Date().getTime();
+    const start_date = new Date(body.start_date).getTime();
+    const end_date = new Date(body.end_date).getTime();
+    db.query(
+        `insert into uni.reservation (lid, cid, day, hour, duration_minutes, start_date, end_date, creation_date) 
+        values (?,?,?,?,?,?,?,?)`, 
+        [body.lid, body.cid, body.day, body.hour, body.duration_minutes, start_date, end_date, creation_date], callback
+    )
+};
+
+exports.insertReservation = insertReservation;
+
+const updateStatus = (
+    db,
+    ids,
+    status,
+    reason,
+    callback,
+) => {
+    db.query(
+        `update uni.substitution set status=?, reason=? where id in (?)`, [status, reason, ids.join(',')], callback
+    )
+}
+
+exports.updateStatus = updateStatus;

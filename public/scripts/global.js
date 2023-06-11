@@ -25,6 +25,19 @@ async function postToServer(path, data){
     });
 }
 
+function minutesToHours(minutes){
+    return minutes/60;
+}
+
+function formatHour(hour){
+    return hour < 10 ? `0${hour}:00` : `${hour}:00`;
+}
+
+function millisToDate(millis){
+    const date = new Date(millis);
+    return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+}
+
 function msToDate(ms){
     const date = new Date(ms);
     const month = (date.getMonth()+1) <= 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;

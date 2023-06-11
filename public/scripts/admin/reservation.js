@@ -4,6 +4,18 @@ function handleBack(ev){
     window.location.href = '/admin/reservations';
 }
 
+window.addEventListener('load', (ev) => {
+    let error = new URL(window.location.href).searchParams.get('error_code');
+    const error_codes = {
+        504: 'Υπάρχει είδη κράτηση στο ίδιο χρονικό διάστημα και αίθουσα',
+    }
+    if(!error) return;
+    document.querySelectorAll("#basic-lbl").forEach((el) => {
+        el.innerHTML = el.innerHTML +=` <span id='error-msg'>${error_codes[error].replaceAll('_', ' ')}</span>`;
+    });
+}
+);
+
 window.addEventListener('load', async function(){
     populateDays();
     populateHours();
@@ -67,7 +79,6 @@ function formatHours(hour){
 }
 
 function populateLectures(lectures){
-    console.log(lectures)
     if(!(lectures.length > 0)){
         return;
     }
@@ -94,7 +105,6 @@ function populateLectures(lectures){
 };
 
 function populateClassrooms(classrooms){
-    console.log(classrooms)
     if(!(classrooms.length > 0)){
         return;
     }
