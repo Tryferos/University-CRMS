@@ -110,6 +110,25 @@ app.get('/admin/reservations/fetch-substitutions', (req, res) => {
 
 })
 
+app.get('/admin/reservations/fetch-classrooms', (req, res) => {
+    reservation.fetchClassrooms(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+});
+app.get('/admin/reservations/fetch-lectures', (req, res) => {
+    reservation.fetchLectures(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+});
+
 app.get('/admin/reservations/classroom', (req, res) => {
     res.sendFile(files.admin.reservations.classroom);
 });
@@ -127,18 +146,26 @@ app.get('/admin/reservations/lecture', (req, res) => {
 });
 
 app.post('/admin/reservations/lecture', (req, res) => {
-    console.log(req.body);
-    reservation.insertLecture(db, req.body, (err, result) => {
+    user.fetchDepartment(db, req.session[sessionObjectName],(err, result) => {
         if(err){
             res.status(500).send({error: 'Error'})
             return;
         }
-        res.redirect('/admin/reservations')
+        reservation.insertLecture(db, req.body, result[0].id, (err, result) => {
+            if(err){
+                res.status(500).send({error: 'Error'})
+                return;
+            }
+            res.redirect('/admin/reservations')
+        });
     });
 });
 
 app.get('/admin/reservations/reservation', (req, res) => {
     res.sendFile(files.admin.reservations.reservation);
+});
+app.post('/admin/reservations/reservation', (req, res) => {
+    console.log(req.body)
 });
 
 

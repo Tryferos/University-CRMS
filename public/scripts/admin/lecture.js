@@ -9,11 +9,23 @@ window.addEventListener('load', async() => {
     const data = await fetchFromServer(
         'admin/reservations/fetch-professors'
     )
+    const department = await fetchFromServer(
+        'fetch-department'
+    )
+    populateDepartment(department[0]);
     populateProfessors(data)
 });
 
+function populateDepartment(department){
+    const select = document.getElementById('department');
+    const option = document.createElement('option');
+    option.value = department.id;
+    option.name = department.id;
+    option.innerHTML = department.department;
+    select.appendChild(option);
+};
+
 function populateProfessors(data){
-    console.log(data)
     const ul = document.querySelector('#professors');
     data.forEach(professor => {
         const li = document.createElement('li');

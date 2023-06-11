@@ -98,6 +98,33 @@ ul{
     padding: 0;
 }
 
+.details{
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    width: 40%;
+}
+
+#details-c{
+    display: none;
+}
+
+.details > details{
+    gap: 1.25rem;
+    align-items: center;
+
+}
+
+
+.details-wrapper{
+    justify-content: space-between;
+    padding: 16px;
+    width: clamp(300px, 90%, 1200px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.75rem;
+}
+
 
 body{
     width: 100vw;

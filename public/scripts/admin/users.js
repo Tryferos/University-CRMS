@@ -1,8 +1,8 @@
 window.addEventListener('load', async(ev) => {
-    fetchFromServer('admin/fetch-users/1').then(async(data) => {
+    fetchFromServer('admin/users/fetch-users/1').then(async(data) => {
         await populateUsersTable(data);
     });
-    fetchFromServer('admin/fetch-users/0').then(async(data) => {
+    fetchFromServer('admin/users/fetch-users/0').then(async(data) => {
         await populateApplicationsTable(data);
     });
     const department = document.getElementById('department');

@@ -96,7 +96,7 @@ const fetchDepartment = (
     callback,
 ) => {
     db.query(
-        `select d.title as department from uni.user s, uni.departments d where s.id = ? and s.department = d.id`, [id], callback
+        `select d.title as department,d.id as id from uni.user s, uni.departments d where s.id = ? and s.department = d.id`, [id], callback
     )
 }
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../styles/global.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/admin/creation.css">
+    <title>Document</title>
+</head>
+<script src="../../scripts/global.js"></script>
+<script src="../../scripts/admin/reservation.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <form action="/admin/reservations/reservation" method="post">
+        <h1>Δημιουργία Κράτησης</h1>
+        <fieldset>
+            <div>
+                <label id="basic-lbl" for="start_date">Έναρξη Κράτησης<span aria-label="required">*</span></label>
+                <input required type="date" id="start_date" name="start_date" 
+                placeholder="Εισάγεται την ημερομηνία της αρχής"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="end_date">Τέλος Κράτησης<span aria-label="required">*</span></label>
+                <input required type="date" id="end_date" name="end_date" 
+                placeholder="Εισάγεται την ημερομηνία του τέλους"/>
+            </div>
+            <div>
+                <label id="basic-lbl" for="day">Ημέρα κράτησης<span aria-label="required">*</span></label>
+                <select id="day" name="day" class="dropdown">
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="duration_minutes">Διάρκεια κράτησης σε λεπτά<span aria-label="required">*</span></label>
+                <input value="120" min="1" type="number" id="duration_minutes" name="duration_minutes" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="hour">Ώρα κράτησης<span aria-label="required">*</span></label>
+                <select id="hour" name="hour" class="dropdown">
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="lid">Διαθέσιμες διδασκαλίες<span aria-label="required">*</span></label>
+                <select onchange="handleLectureChange(event)" id="lid" name="lid" class="dropdown">
+                </select>
+            </div>
+            <div>
+                <label id="basic-lbl" for="cid">Διαθέσιμες Αίθουσες<span aria-label="required">*</span></label>
+                <select onchange="handleClassroomChange(event)" id="cid" name="cid" class="dropdown">
+                </select>
+            </div>
+        </fieldset>
+        <div class="details-wrapper">
+            <div class="details" id="details-c">
+                <label id="basic-lbl" for="classroom-details">Λεπτομέρειες επιλεγμένης αίθουσας</label>
+                <details id="classroom-details" open>
+    
+                </details>
+            </div>
+            <div class="details" id="details-l">
+                <label id="basic-lbl" for="lecture-details">Λεπτομέρειες επιλεγμένης διδασκαλίας</label>
+                <details open id="lecture-details">
+    
+                </details>
+            </div>
+        </div>
+        <button class="btn">Δημιουργία κράτησης</button>
+        <button onclick="handleBack(event)" class="btn-sec">Πήγαινε πίσω</button>
+    </form>
+</body>
+</html>
