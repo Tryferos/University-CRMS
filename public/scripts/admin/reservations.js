@@ -118,34 +118,6 @@ function handleChange(ev){
     }
 }
 
-function handleFilter(id, value2, status1, rowNumber){
-    const btns = document.querySelectorAll(`#${id}.btn2`);
-    const rows = document.querySelectorAll(`tr#${id}-row`);
-    btns.forEach(btn => {
-        if(btn.getAttribute('selected')=='true'){
-            rows.forEach((row,i) => {
-                const status = row.children[rowNumber].getAttribute('data-status');
-                const value = btn.value;
-                if(value=='Όλες'){
-                    row.style.display = 'table-row';
-                }else if(value==value2){
-                    if(status==status1){
-                        row.style.display = 'none';
-                    }else{
-                        row.style.display = 'table-row';
-                    }
-                }else{
-                    if(status==status1){
-                        row.style.display = 'table-row';
-                    }else{
-                        row.style.display = 'none';
-                    }
-                }
-            });
-        }
-    });
-
-}
 
 
 

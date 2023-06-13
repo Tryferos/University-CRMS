@@ -1,0 +1,88 @@
+ul > form{
+    width: calc(5% + 200px);
+    height: 50px;
+    border: 1px solid var(--var-secondary);
+    border-radius: 5px;
+    padding: 0px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--var-secondary);
+}
+
+ul > form:hover, .btn2:hover, .btn2[selected='true'],ul > form > .btn:hover{
+    cursor: pointer;
+    border: 1px solid var(--var-secondary);
+    color: #ffffff;
+    background-color: var(--var-secondary);
+}
+
+
+.btn{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: var(--var-secondary);
+    width: 100%;
+    height: 100%;
+}
+.btn2{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: calc(5% + 200px);
+    height: 50px;
+    border-bottom: 1px solid var(--var-secondary);
+    border-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding: 0px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--var-secondary);
+}
+
+h1 > span{
+    font-size: 1em;
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    gap: 25px;
+    margin-top: 75px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+form{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.dates{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.dates > div{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+article{
+    padding-bottom: 100px;
+}

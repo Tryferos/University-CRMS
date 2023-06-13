@@ -1,3 +1,4 @@
+const { get } = require("http");
 
 const fetchSubstitutions = (
     db,
@@ -125,6 +126,16 @@ const fetchLectures = (
         });
 }
 
+async function getLectureProfessors(
+    db,
+    id,
+    callback,
+){
+await db.promise().query(`select u.first_name,u.last_name,u.id,u.professor_role from uni.lecture l, uni.user u, uni.lectureprofessors lp where l.id=lp.lid and u.id=lp.uid and l.id=${id}`).then((data) => {
+    callback(null, res)
+}).catch(err => callback(err, null));
+}
+
 exports.fetchLectures = fetchLectures;
 
 const insertReservation = (
@@ -172,6 +183,77 @@ const fetchReservations = (
 }
 
 exports.fetchReservations = fetchReservations;
+
+const fetchReservationsAll = (
+    db,
+    callback,
+) => {
+    db.query(
+        `select r.start_date,r.end_date,r.day,r.hour,r.id,u.first_name,u.last_name,u.id as uid,r.id as rid,r.lid as lid,
+        r.duration_minutes,c.name as classroom_name,c.building,c.address,d.title,d.id as department_id,l.name as lecture_name,l.code,l.type,l.semester,l.lecture_hours from 
+        uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d, uni.user u, uni.lectureprofessors lp 
+        where l.id=r.lid and c.id=r.cid and d.id=l.department and l.id=lp.lid and u.id=lp.uid`,async (err, res) => {
+            if(err){
+                callback(err, null);
+                return;
+            }
+            if(res==null || res.length==0){
+                db.query(
+                    `select r.start_date,r.end_date,r.day,r.hour,r.id,r.duration_minutes,c.name as classroom_name,c.building,c.address,d.title,l.name as lecture_name,l.code,l.type,l.semester,l.lecture_hours from
+                    uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d 
+                    where l.id=r.lid and c.id=r.cid and d.id=l.department`, callback
+                )
+                return;
+            }
+            const ids = res.map(lecture => lecture.id).join(',');
+            const lectureIds = res.map(reservation => reservation.lid)
+            const professors = new Map();
+            for(let i=0; i<lectureIds.length; i++){
+                const lectureId = lectureIds[i];
+                await db.promise().query(`select u.first_name,u.last_name,u.id,u.professor_role from uni.lecture l, uni.user u, uni.lectureprofessors lp where l.id=lp.lid and u.id=lp.uid and l.id=${lectureId}`).
+                then((data) => {
+                    professors.set(lectureId, data[0]);
+                });
+            }
+            const newRes = res.map(lecture => {
+                return {
+                    code: lecture.code, department: lecture.title, id: lecture.id,lid:lecture.lid, 
+                    deprtment_id: lecture.department_id,
+                    lecture_hours: lecture.lecture_hours, lecture_name: lecture.lecture_name, 
+                    semester: lecture.semester, type: lecture.type,
+                    start_date: lecture.start_date, end_date: lecture.end_date,
+                    day: lecture.day, hour: lecture.hour, duration_minutes: lecture.duration_minutes,
+                    classroom_name: lecture.classroom_name,
+                    professors: professors.get(lecture.lid)
+                }
+            });
+            const filteredRes = [];
+            newRes.forEach(lecture => {
+                if(!filteredRes.find(l => l.lid==lecture.lid)){
+                    filteredRes.push(lecture);
+                }else{
+                    filteredRes.find(l => l.lid==lecture.lid).professors = [...new Set(filteredRes.find(l => l.lid==lecture.lid).professors)];
+                }
+            });
+            db.query(
+                `select r.start_date,r.end_date,r.day,r.hour,r.id as rid,
+                r.duration_minutes,c.name as classroom_name,c.building,c.address,d.title,l.name as lecture_name,l.code,l.type,l.semester,l.lecture_hours from
+                uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d 
+                where l.id=r.lid and c.id=r.cid and d.id=l.department and r.id not in (${ids})`, (err, result) => {
+                    if(err){
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, filteredRes.concat(result));
+                }
+
+            )
+        }
+    )
+}
+
+
+exports.fetchReservationsAll = fetchReservationsAll;
 
 const insertSubstitution = (
     db,

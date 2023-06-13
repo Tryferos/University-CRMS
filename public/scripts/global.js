@@ -67,9 +67,47 @@ function formatDays(day){
     return days[day];
 }
 
+function millisToDateTimeLocal(millis){
+    const date = new Date(millis);
+    const month = (date.getMonth()+1) <= 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+    const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    return `${date.getFullYear()}-${month}-${day}T${hours}:${minutes}`
+}
+
 window.addEventListener('load', async () => {
     const dates = document.querySelectorAll('input[type="date"');
     dates.forEach(date => {
         date.setAttribute('min', millisToDateReverse(Date.now()));
     });
 });
+
+function handleFilter(id, value2, status1, rowNumber){
+    const btns = document.querySelectorAll(`#${id}.btn2`);
+    const rows = document.querySelectorAll(`tr#${id}-row`);
+    btns.forEach(btn => {
+        if(btn.getAttribute('selected')=='true'){
+            rows.forEach((row,i) => {
+                const status = row.children[rowNumber].getAttribute('data-status');
+                const value = btn.value;
+                if(value=='Όλες'){
+                    row.style.display = 'table-row';
+                }else if(value==value2){
+                    if(status==status1){
+                        row.style.display = 'none';
+                    }else{
+                        row.style.display = 'table-row';
+                    }
+                }else{
+                    if(status==status1){
+                        row.style.display = 'table-row';
+                    }else{
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+    });
+
+}

@@ -1,6 +1,3 @@
-function handleChangeLecture(event){
-    
-}
 
 window.addEventListener('load', async(ev) => {
     const data = await fetchFromServer('professor/lectures');
@@ -14,7 +11,6 @@ window.addEventListener('load', async(ev) => {
 });
 
 function populateTableLectures(data){
-    console.log(data)
     const table = document.getElementById('lectures-table');
     table.innerHTML = `
         <tr>

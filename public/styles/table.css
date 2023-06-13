@@ -76,3 +76,26 @@ td[data-status='Μη Εγκεκριμένη']{
     box-shadow: 2px 2px 12px 8px #e6e2e2;
     outline: 1px solid #cacaca;
 }
+
+td[data-status='Θεωρία'], td[data-status='Διδασκαλία']{
+    color: green;
+}
+
+td[data-status='Εργαστήριο']{
+    color: yellowgreen;
+}
+
+#classroom-row:hover 
+td[data-status='Θεωρία'], #classroom-row:hover td[data-status='Διδασκαλία']{
+    color: white;
+}
+
+#classroom-row:hover 
+td[data-status='Εργαστήριο']{
+    color: white;
+}
+
+#classroom-row:hover{
+    background-color: var(--var-secondary);
+    color: white;
+}

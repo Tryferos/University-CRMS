@@ -65,7 +65,7 @@ app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
-    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register']
+    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', '/fetch-reservations-all']
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query)) {
         // return res.status(500).send({error: 'Not logged in'})
         res.redirect('/login?error_code=500')
@@ -106,6 +106,13 @@ function adminMiddleware(req, res, next){
             '/admin/reservations/reservation',
             '/admin/reservations/fetch-substitutions'
         ]
+        const everyone = [
+            '/admin/reservations/fetch-classrooms'
+        ]
+        if(everyone.includes(path) ){
+            next();
+            return;
+        }
         if(professor.includes(path) && user.professor==1){
             next();
             return;
@@ -184,6 +191,17 @@ app.get('/admin/users/fetch-users/:approval', (req, res) => {
         res.send(result);
     });
 });
+
+app.get('/fetch-reservations-all', (req, res) => {
+    reservation.fetchReservationsAll(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+})
+
 app.get('/fetch-reservations', (req, res) => {
     user.fetchDepartment(db, req.session[sessionObjectName], (err1, department) => {
         if(err1){
