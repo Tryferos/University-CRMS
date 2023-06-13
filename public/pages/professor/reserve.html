@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../styles/global.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/admin/creation.css">
+    <title>Document</title>
+</head>
+<script src="../../scripts/global.js"></script>
+<script src="../../scripts/professor/reserve.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <form action="/professor/reserve" method="post">
+        <h1>Δημιουργία κράτησης αναπλήρωσης</h1>
+        <fieldset>
+            <div>
+                <label id="" for="rid">Διαθέσιμες κρατήσεις<span aria-label="required">*</span></label>
+                <select onchange="handleReservationChange(event)" id="rid" name="rid" class="dropdown">
+                </select>
+            </div>
+            <div>
+                <label for="initial_reservation_date">Ημερομηνία προς αναπλήρωση<span aria-label="required">*</span></label>
+                <select
+                id="initial_reservation_date" name="initial_reservation_date" class="dropdown">
+            </select>
+        </div>
+        <div>
+            <label id="basic-lbl" for="cid">Διαθέσιμες Αίθουσες<span aria-label="required">*</span></label>
+            <select onchange="handleClassroomChange(event)" id="cid" name="cid" class="dropdown">
+            </select>
+        </div>
+        <div>
+            <label id="" for="substitution_date">Ημερομηνία αναπλήρωσης<span aria-label="required">*</span></label>
+            <input required type="date" id="substitution" name="substitution_date" 
+            placeholder="Εισάγεται την ημερομηνία της αναπλήρωσης"/>
+        </div>
+            <div>
+                <label id="" for="duration_minutes">Διάρκεια αναπλήρωσης σε λεπτά<span aria-label="required">*</span></label>
+                <input value="120" min="1" type="number" id="duration_minutes" name="duration_minutes" />
+            </div>
+            <div>
+                <label id="basic-lbl" for="hour">Ώρα αναπλήρωσης<span aria-label="required">*</span></label>
+                <select required id="hour" name="hour" class="dropdown">
+                </select>
+            </div>
+        </fieldset>
+        <div class="details-wrapper">
+            <div class="details" id="details-r">
+                <label id="" for="reservation-details">Λεπτομέρειες επιλεγμένης κράτησης για αναπλήρωση</label>
+                <details open id="reservation-details">
+    
+                </details>
+            </div>
+            <div class="details" id="details-c">
+                <label id="" for="classroom-details">Λεπτομέρειες επιλεγμένης αίθουσας</label>
+                <details id="classroom-details" open>
+    
+                </details>
+            </div>
+        </div>
+        <button class="btn">Δημιουργία κράτησης αναπλήρωσης</button>
+        <button onclick="handleBack(event)" class="btn-sec">Πήγαινε πίσω</button>
+    </form>
+</body>
+</html>

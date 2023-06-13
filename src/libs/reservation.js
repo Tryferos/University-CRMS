@@ -4,7 +4,7 @@ const fetchSubstitutions = (
     callback,
 ) => {
     db.query(
-        `select s.id, s.creation_date, s.status, s.hour, s.duration_minutes, s.substitution_date, c.building, c.name as classroom_name, c.address, 
+        `select s.id, s.creation_date, s.status, s.hour, s.duration_minutes, s.substitution_date, c.building, c.name as classroom_name, c.address, s.initial_reservation_date, 
         l.name as lecture_name, l.code 
         from uni.substitution s, uni.reservation r, uni.classroom c, uni.lecture l, uni.departments d  where s.cid=c.id and s.rid=r.id and l.id=r.lid and d.id=l.department`, callback
     )
@@ -82,13 +82,21 @@ exports.fetchClassrooms = fetchClassrooms;
 
 const fetchLectures = (
     db,
+    id,
     callback,
 ) => {
     db.query(
         `select u.first_name,u.last_name,u.professor_role,u.id as uid,l.id, l.code, l.name, l.type, l.semester, l.lecture_hours,d.title as department from uni.lecture l, 
-        uni.departments d, uni.lectureprofessors lp, uni.user u where d.id=l.department and l.id=lp.lid and u.id=lp.uid`, (err, res) => {
-            if(err || res.length==0){
+        uni.departments d, uni.lectureprofessors lp, uni.user u where d.id=l.department and l.id=lp.lid and u.id=lp.uid and l.department=${id}`,(err, res) => {
+            if(err){
                 callback(err, null);
+                return;
+            }
+            if(res==null || res.length==0){
+                db.query(
+                    `select l.id, l.code, l.name, l.type, l.semester, l.lecture_hours,d.title as department from uni.lecture l, 
+                    uni.departments d where l.department=${id} and d.id=l.department`, callback
+                )
                 return;
             }
             const ids = res.map(lecture => lecture.id).join(',');
@@ -107,7 +115,7 @@ const fetchLectures = (
             });
             db.query(
                 `select l.id, l.code, l.name, l.type, l.semester, l.lecture_hours,d.title as department from uni.lecture l, 
-                uni.departments d where d.id=l.department and l.id not in (${ids});`, (err, result) => {
+                uni.departments d where l.department=${id} and d.id=l.department and l.id not in (${ids});`, (err, result) => {
                     if(err){
                         callback(err, null);
                         return;
@@ -150,3 +158,35 @@ const updateStatus = (
 
 exports.updateStatus = updateStatus;
 
+const fetchReservations = (
+    db,
+    id,
+    callback,
+) => {
+    db.query(
+        `select r.start_date,r.end_date,r.day,r.hour,r.id,
+        r.duration_minutes,c.name as classroom_name,c.building,c.address,d.title,l.name as lecture_name,l.code,l.type,l.semester,l.lecture_hours from 
+        uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d, uni.lectureprofessors lp
+        where l.id=r.lid and lp.lid=l.id and l.department=${id} and c.id=r.cid and d.id=l.department`, callback
+    )
+}
+
+exports.fetchReservations = fetchReservations;
+
+const insertSubstitution = (
+    db,
+    body,
+    callback,
+) => {
+    const creation_date = new Date().getTime();
+    const sub_date = new Date(body.substitution_date).getTime();
+    db.query(
+        `insert into uni.substitution (rid, cid, hour, duration_minutes, substitution_date, 
+            creation_date, initial_reservation_date) 
+            values (?,?,?,?,?,?,?)`, 
+            [body.rid, body.cid, body.hour, body.duration_minutes, `${sub_date}`, 
+                `${creation_date}`, body.initial_reservation_date], callback
+    )
+};
+
+exports.insertSubstitution = insertSubstitution;

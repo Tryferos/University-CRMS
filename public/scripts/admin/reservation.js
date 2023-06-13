@@ -48,6 +48,7 @@ function populateLectureDetails(dataset){
 function populateClassroomDetails(dataset){
     document.getElementById('details-c').style.display = 'flex';
     const details = document.getElementById('classroom-details');
+    populateHours(dataset.hourly_availability);
     details.innerHTML = `
         <p><b>Όνομα:</b> ${dataset.name}</p>
         <p><b>Κτίριο:</b> ${dataset.building}</p>
@@ -60,19 +61,8 @@ function populateClassroomDetails(dataset){
         ${dataset.weekly_availability !=='null' ? `<p><b>Εβδομαδιαία Διαθεσιμότητα:</b> 
         ${dataset.weekly_availability.split(',').map(day => formatDays(day)).join(',')}</p>` : ''}
         ${dataset.hourly_availability !=='null' ? `<p><b>Ωριαία Διαθεσιμότητα:</b> 
-        ${dataset.hourly_availability.split(',').map(hour => formatHours(hour)).join(',')}</p>` : ''}
+        ${dataset.hourly_availability.split(',').map(hour => formatHour(hour)).join(',')}</p>` : ''}
     `;
-}
-
-const days =  ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη','Παρασκευή', 'Σάββατο'];
-function formatDays(day){
-    return days[day];
-}
-function formatHours(hour){
-    if(hour<10){
-        return `0${hour}:00`;
-    }
-    return `${hour}:00`;
 }
 
 function populateLectures(lectures){
@@ -105,7 +95,6 @@ function populateClassrooms(classrooms){
     if(!(classrooms.length > 0)){
         return;
     }
-
     const select = document.getElementById('cid');
     classrooms.forEach((classroom, i) => {
         const option = document.createElement('option');
@@ -139,20 +128,15 @@ function populateDays(){
     })
 }
 
-function populateHours(){
-    const hours = [];
-    for(let i=6; i<=22; i++){
-        if(i<10){
-            hours.push(`0${i}:00`);
-            continue;
-        }
-        hours.push(`${i}:00`);
-    }
-    const select = document.getElementById('hour');
-    hours.forEach((hour, i) => {
+function populateHours(data){
+    const hour = document.getElementById('hour');
+    while(hour.firstChild){hour.removeChild(hour.firstChild);}
+    if(data==null || data=="null") return;
+    const hours = data.split(',')
+    for(let i=0; i<hours.length; i++){
         const option = document.createElement('option');
-        option.value = i;
-        option.innerHTML = hour;
-        select.appendChild(option);
-    })  
+        option.value = hours[i];
+        option.innerText = hours[i] > 9 ? `${hours[i]}:00` : `0${hours[i]}:00`;
+        hour.appendChild(option);
+    }
 }

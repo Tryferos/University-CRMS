@@ -16,6 +16,7 @@ function populateTable(data){
             <th>Διεύθυνση αίθουσας</th>
             <th>Κτήριο</th>
             <th>Δημιουργία αίτησης</th>
+            <th>Ημερομηνία προς αναπλήρωση</th>
             <th>Ημερομηνία αναπλήρωσης</th>
             <th>Ώρα αναπλήρωσης</th>
             <th>Διάρκεια αναπλήρωσης</th>
@@ -33,6 +34,7 @@ function populateTable(data){
             <td>${data[i].address}</td>
             <td>${data[i].building}</td>
             <td>${msToDate(data[i].creation_date)}</td>
+            <td>${millisToDate(data[i].initial_reservation_date)}</td>
             <td>${millisToDate(data[i].substitution_date)}</td>
             <td>${formatHour(data[i].hour)}</td>
             <td>${minutesToHours(data[i].duration_minutes)} ω. / ${data[i].duration_minutes} λ.</td>
@@ -96,6 +98,7 @@ function handleCheckChange(ev){
     form.style.display = 'none';
 }
 
+
 function handleChange(ev){
     btns = document.querySelectorAll(`#${ev.target.id}.btn2`);
     btns.forEach(btn => {
@@ -107,7 +110,7 @@ function handleChange(ev){
         }
     });
     if(ev.target.id=='application'){
-        handleFilter('application','Απαντημένες', 'Εκκρεμούσα', 9);
+        handleFilter('application','Απαντημένες', 'Εκκρεμούσα', 10);
         return;
     }
     if(ev.target.id=='lecture'){
