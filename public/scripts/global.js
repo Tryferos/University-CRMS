@@ -1,3 +1,10 @@
+const error_codes = {
+    500: 'Λάθος κωδικός πρόσβασης ή email',
+    502: 'Η αίτηση εγγραφής σας δεν έχει εγκριθεί ακόμα',
+    504: 'Υπάρχει είδη κράτηση στο ίδιο χρονικό διάστημα και αίθουσα',
+    506: 'Το email χρησιμοποιείται ήδη',
+}
+
 async function fetchFromServer(path){
     return new Promise((res, rej) => {
         const xhttp = new XMLHttpRequest();

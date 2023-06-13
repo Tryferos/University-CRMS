@@ -1,0 +1,19 @@
+#lecture-wrapper{
+    margin-top: 75px;
+}
+
+article > ul > form{
+    height: 75px;
+}
+
+article > h1{
+    margin-bottom: 75px;
+    font-weight: 400;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+article > h1 > span{
+    font-size: 1.0em;
+    font-weight: 600;
+}

@@ -20,11 +20,12 @@ function populateTable(data){
             <th>Ώρα αναπλήρωσης</th>
             <th>Διάρκεια αναπλήρωσης</th>
             <th>Κατάσταση αίτησης</th>
-            <th>Επιλογή αίτησης</th>
+            ${location.pathname=='/admin/reservations' ? '<th>Επιλογή αίτησης</th>' : ''}
         </tr>
     `;
     for(let i=0; i<data.length; i++){
         const row = document.createElement('tr');
+        row.setAttribute('id', 'application-row')
         row.innerHTML = `
             <td>${data[i].lecture_name}</td>
             <td>${data[i].code}</td>
@@ -36,7 +37,7 @@ function populateTable(data){
             <td>${formatHour(data[i].hour)}</td>
             <td>${minutesToHours(data[i].duration_minutes)} ω. / ${data[i].duration_minutes} λ.</td>
             <td data-status='${data[i].status}'>${data[i].status}</td>
-            <td><input onchange="handleCheckChange(event)" id='${data[i].id}' type='checkbox'></td>
+            ${location.pathname=='/admin/reservations' ? `<td><input onchange="handleCheckChange(event)" id='${data[i].id}' type="checkbox"></td>` : ''}
         `;
         table.appendChild(row);
     }
@@ -96,7 +97,7 @@ function handleCheckChange(ev){
 }
 
 function handleChange(ev){
-    const btns = document.querySelectorAll('input[type="button"]');
+    btns = document.querySelectorAll(`#${ev.target.id}.btn2`);
     btns.forEach(btn => {
         if(ev.target.value==btn.value){
             btn.setAttribute('selected', 'true');
@@ -105,28 +106,33 @@ function handleChange(ev){
             btn.setAttribute('selected', 'false');
         }
     });
-    handleFilter();
+    if(ev.target.id=='application'){
+        handleFilter('application','Απαντημένες', 'Εκκρεμούσα', 9);
+        return;
+    }
+    if(ev.target.id=='lecture'){
+        handleFilter('lecture','Εργαστήρια', 'Θεωρία', 2);
+    }
 }
 
-function handleFilter(){
-    const btns = document.querySelectorAll('input[type="button"]');
-    const rows = document.querySelectorAll('tr');
+function handleFilter(id, value2, status1, rowNumber){
+    const btns = document.querySelectorAll(`#${id}.btn2`);
+    const rows = document.querySelectorAll(`tr#${id}-row`);
     btns.forEach(btn => {
         if(btn.getAttribute('selected')=='true'){
             rows.forEach((row,i) => {
-                if(i==0) return;
-                const status = row.children[9].getAttribute('data-status');
+                const status = row.children[rowNumber].getAttribute('data-status');
                 const value = btn.value;
                 if(value=='Όλες'){
                     row.style.display = 'table-row';
-                }else if(value=='Απαντημένες'){
-                    if(status=='Εκκρεμούσα'){
+                }else if(value==value2){
+                    if(status==status1){
                         row.style.display = 'none';
                     }else{
                         row.style.display = 'table-row';
                     }
                 }else{
-                    if(status=='Εκκρεμούσα'){
+                    if(status==status1){
                         row.style.display = 'table-row';
                     }else{
                         row.style.display = 'none';

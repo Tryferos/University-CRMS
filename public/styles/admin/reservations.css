@@ -1,11 +1,16 @@
 article{
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-top: 75px;
     padding: 25px;
+    padding-bottom: 250px;
+}
+
+body{
+    width: 100vw;
 }
 
 ul{
@@ -61,9 +66,6 @@ form{
     justify-content: space-evenly;
 }
 
-article{
-    padding-bottom: 250px;
-}
 
 ul > form{
     width: calc(5% + 200px);
@@ -97,6 +99,7 @@ select{
     padding: 14px 18px;
     outline: 1px solid #868383;
 }
+
 
 fieldset{
     outline: none;

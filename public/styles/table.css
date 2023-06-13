@@ -51,13 +51,16 @@ td[data-status='Μη Εγκεκριμένη']{
     color: red;
 }
 
-.table td{
-    padding: 24px 16px;
-    text-align: center;
+.table td > p{
     max-width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
+}
+.table td{
+    padding: 24px 16px;
+    text-align: center;
 }
 
 .table:hover{

@@ -47,6 +47,10 @@ const files = {
             lecture: path.join(__dirname, '../public/pages/admin/lecture.html'),
         },
         users: path.join(__dirname, '../public/pages/admin/users.html'),
+    },
+    professor: {
+        professor: path.join(__dirname, '../public/pages/professor/professor.html'),
+        reserve: path.join(__dirname, '../public/pages/professor/reserve.html'),
     }
 }
 
@@ -56,6 +60,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({limit: '4mb', extended: true}));
 
 app.use(authMiddleware);
+app.use(professorMiddleware);
 app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
@@ -69,6 +74,21 @@ function authMiddleware(req, res, next) {
     next();
 }  
 
+function professorMiddleware(req, res, next){
+    const path = req.path.toLowerCase();
+    if(!path.startsWith('/professor')){
+        return next();
+    }
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        const user = result[0];
+        if(err || user.approved!=1 || user.professor!=1){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        next();
+    });
+}
+
 function adminMiddleware(req, res, next){
     const path = req.path.toLowerCase();
     if(!path.startsWith('/admin')){
@@ -76,7 +96,11 @@ function adminMiddleware(req, res, next){
     }
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         const user = result[0];
-        if(err || (user.user_admin!=1 && user.reserve_admin!=1) || user.approved!=1){
+        if(err){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        if((user.user_admin!=1 && user.reserve_admin!=1) || user.approved!=1){
             res.redirect('/login?error_code=500')
             return;
         }
@@ -95,6 +119,35 @@ function adminMiddleware(req, res, next){
         next();
     });
 }
+
+app.get('/professor/reserve', (req, res) => {
+    res.sendFile(files.professor.reserve);
+});
+
+app.get('/professor/professor', (req, res) => {
+    res.sendFile(files.professor.professor);
+});
+
+app.get('/professor/lectures', (req, res) => {
+    reservation.fetchLectures(db, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        const ownLectures = result.filter(lecture => lecture.professors && lecture.professors.some(prof => prof.uid==req.session[sessionObjectName]));
+        res.send(ownLectures);
+    });
+});
+
+app.get('/fetch-self', (req, res) => {
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send(result);
+    });
+})
 
 app.get('/admin/users/fetch-users/:approval', (req, res) => {
     user.fetchUsers(db, req.session[sessionObjectName], req.params.approval,(err, result) => {
@@ -287,7 +340,7 @@ app.post('/register', (req, res) => {
     const body = req.body;
     user.insertUser(db, body, (err, result) => {
         if(err){
-            res.redirect('/register?error_code=500')
+            res.redirect('/register?error_code=506')
             return;
         }
         res.redirect('/')
