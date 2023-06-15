@@ -38,6 +38,7 @@ const sessionObjectName = 'userid'
 const files = {
     index: path.join(__dirname, '../public/pages/index.html'),
     login: path.join(__dirname, '../public/pages/login.html'),
+    classroom: path.join(__dirname, '../public/pages/classroom.html'),
     register: path.join(__dirname, '../public/pages/register.html'),
     admin: {
         reservations: {
@@ -65,14 +66,16 @@ app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
-    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', '/fetch-reservations-all']
-    if (!req.session[sessionObjectName] && !excludedPaths.includes(query)) {
-        // return res.status(500).send({error: 'Not logged in'})
+    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', 
+    '/fetch-reservations-all', '/admin/reservations/fetch-classrooms', '/classroom', '/fetch-classroom/']
+    if (!req.session[sessionObjectName] && !excludedPaths.includes(query) 
+    && !query.startsWith('/classroom/') && !query.startsWith('/fetch-classroom/')) {
         res.redirect('/login?error_code=500')
         return;
     }
     next();
 }  
+
 
 function professorMiddleware(req, res, next){
     const path = req.path.toLowerCase();
@@ -90,9 +93,16 @@ function professorMiddleware(req, res, next){
 }
 
 function adminMiddleware(req, res, next){
+    const everyone = [
+        '/admin/reservations/fetch-classrooms'
+    ]
     const path = req.path.toLowerCase();
     if(!path.startsWith('/admin')){
         return next();
+    }
+    if(everyone.includes(path) ){
+        next();
+        return;
     }
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         const user = result[0];
@@ -106,13 +116,6 @@ function adminMiddleware(req, res, next){
             '/admin/reservations/reservation',
             '/admin/reservations/fetch-substitutions'
         ]
-        const everyone = [
-            '/admin/reservations/fetch-classrooms'
-        ]
-        if(everyone.includes(path) ){
-            next();
-            return;
-        }
         if(professor.includes(path) && user.professor==1){
             next();
             return;
@@ -139,6 +142,31 @@ function adminMiddleware(req, res, next){
 
 app.get('/professor/reserve', (req, res) => {
     res.sendFile(files.professor.reserve);
+});
+
+
+app.get('/classroom/:id', (req, res) => {
+    res.sendFile(files.classroom);
+});
+
+app.get('/fetch-classroom/:id', (req, res) => {
+    reservation.fetchClassroom(db, req.params.id, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        if(result.length==0){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        reservation.fetchClassroomReservations(db, req.params.id, (err, reservations) => {
+            if(err){
+                res.status(500).send({error: 'Error'})
+                return;
+            }
+            res.send({classroom: result[0], reservations: reservations});
+        });
+    });
 });
 
 app.post('/professor/reserve', (req, res) => {

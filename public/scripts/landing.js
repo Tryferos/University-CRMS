@@ -78,6 +78,7 @@ function populateReservationsTable(data){
 
 function handleClick(ev){
     const id = ev.currentTarget.getAttribute('data-id');
+    location.href = `/classroom/${id}`;
 
 }
 

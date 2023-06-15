@@ -40,6 +40,12 @@ function formatHour(hour){
     return hour < 10 ? `0${hour}:00` : `${hour}:00`;
 }
 
+function formatHourAndMinutes(minutes){
+    const hours = Math.floor(minutes/60);
+    const minutes2 = minutes%60;
+    return `${hours}:${minutes2 < 10 ? `0${minutes2}` : minutes2}`;
+}
+
 function millisToDate(millis){
     const date = new Date(millis);
     return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`

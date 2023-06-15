@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/navbar.css" />
+    <link rel="stylesheet" href="../styles/classroom.css" />
+</head>
+<script src="../scripts/global.js"></script>
+<script src="../scripts/classroom.js"></script>
+<body>
+    <nav class="navbar"></nav>
+    <article>
+        <h1><span id="classroom-name"></span></h1>
+        <section class="classroom-container">
+            <div class="reservations">
+                <h2>Διαλέξεις <span id="reservations-count"></span></h2>
+                <ul id="reservations-list">
+                </ul>
+            </div>
+            <div class="details">
+                <div class="basic-details">
+                    <h2>Βασικά στοιχεία</h2>
+                    <ul id="details">
+
+                    </ul>
+                </div>
+                <div class="schedule">
+                    <h2>Διαθεσιμότητα αίθουσας</h2>
+                    <ul id="schedule">
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <div class="admin">
+            <input onclick="handleEdit(event)" type="button" value="Επεξεργασία"/>
+            <input onclick="handleDelete(event)" type="button" value="Διαγραφή"/>
+        </div>
+    </article>
+</body>
+</html>

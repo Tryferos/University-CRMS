@@ -1,4 +1,3 @@
-const { get } = require("http");
 
 const fetchSubstitutions = (
     db,
@@ -26,6 +25,18 @@ const insertClassroom = (
 }
 
 exports.insertClassroom = insertClassroom;
+
+const fetchClassroom = (
+    db,
+    id,
+    callback,
+) => {
+    db.query(
+        `select * from uni.classroom where id=${id}`, callback
+    )
+}
+
+exports.fetchClassroom = fetchClassroom;
 
 const fetchProfessors = (
     db,
@@ -272,3 +283,17 @@ const insertSubstitution = (
 };
 
 exports.insertSubstitution = insertSubstitution;
+
+const fetchClassroomReservations = (
+    db,
+    id,
+    callback,
+) => {
+    db.query(
+        `select r.start_date, r.end_date, r.day,r.hour,r.duration_minutes,l.code,l.name,l.type,
+        l.semester,l.lecture_hours,d.title as department from uni.classroom c, uni.reservation r, uni.lecture l, uni.departments d 
+        where c.id = ${id} and c.id = r.cid and r.lid=l.id and d.id=l.department`, callback
+    )
+}
+
+exports.fetchClassroomReservations = fetchClassroomReservations;
