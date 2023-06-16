@@ -66,7 +66,7 @@ app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
-    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', 
+    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', '/roles', '/fetch-self',
     '/fetch-reservations-all', '/admin/reservations/fetch-classrooms', '/classroom', '/fetch-classroom/']
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query) 
     && !query.startsWith('/classroom/') && !query.startsWith('/fetch-classroom/')) {
@@ -140,6 +140,17 @@ function adminMiddleware(req, res, next){
     });
 }
 
+app.get('/roles', (req, reslt) => {
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            reslt.send({professor: false, user_admin: false, reserve_admin: false})
+            return;
+        }
+        const res = result[0];
+        reslt.send({professor: res.professor==1, user_admin: res.user_admin==1, reserve_admin: res.reserve_admin==1});
+    });
+})
+
 app.get('/professor/reserve', (req, res) => {
     res.sendFile(files.professor.reserve);
 });
@@ -203,7 +214,7 @@ app.get('/professor/lectures', (req, res) => {
 app.get('/fetch-self', (req, res) => {
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         if(err){
-            res.status(500).send({error: 'Error'})
+            res.send({error: true})
             return;
         }
         res.send(result);
@@ -476,10 +487,21 @@ app.get('/logout', (req, res) => {
 
 app.get('/login', (req, res) => {
     if(req.session[sessionObjectName]){
-        res.redirect('/classroom');
+        res.redirect('/');
         return;
     }
     res.sendFile(files.login);
+});
+
+app.post('/admin/reservations/classroom/delete', (req, res) => {
+    const id = req.body.id;
+    reservation.deleteClassroom(db, id, (err, result) => {
+        if(err){
+            res.status(500).send({error: 'Error'})
+            return;
+        }
+        res.send({success: true});
+    });
 });
 
 app.listen(port, () => {

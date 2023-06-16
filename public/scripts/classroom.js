@@ -2,7 +2,14 @@ window.addEventListener('load', async(ev) => {
     const data = await fetchFromServer('fetch-classroom/'+window.location.href.split('/').pop());
     populateClassroom(data.classroom);
     populateReservations(data.reservations)
+    const roles = await fetchFromServer('roles');
+    populateButtons(roles)
 });
+
+function populateButtons(roles){
+    if(!roles.reserve_admin) return;
+    document.getElementById('admin').style.display = 'flex';
+}
 
 function populateClassroom(data){
     const name = document.getElementById('classroom-name');
@@ -56,12 +63,12 @@ function svgNo(){
 
 function populateSchedule(data){
     const schedule = document.getElementById('schedule');
-    data.weekly_availability.split(',').forEach(day => {
+    data.weekly_availability !== null && data.weekly_availability.split(',').forEach(day => {
         const li = document.createElement('li');
         li.innerHTML = `<img src='../images/date.png'/><p>${formatDays(day)}</p>`;
         schedule.appendChild(li);
     })
-    data.hourly_availability.split(',').forEach(hour => {
+    data.hourly_availability !== null && data.hourly_availability.split(',').forEach(hour => {
         const li = document.createElement('li');
         li.innerHTML = `<img src='../images/clock.png'/><p>${formatHour(hour)}</p>`;
         schedule.appendChild(li);
@@ -71,6 +78,15 @@ function populateSchedule(data){
 function populateReservations(data){
     const count = document.getElementById('reservations-count');
     count.innerText = `${Math.min(4,data.length)}/${data.length}`;
+
+    if(data.length==0){
+        console.log(data)
+        const ul = document.getElementById('reservations-list');
+        const li = document.createElement('li');
+        li.innerHTML = `<p>Δεν υπάρχουν κρατήσεις</p>`;
+        ul.appendChild(li);
+        return;
+    }
 
     data = data.map(reservation => {
         const start_date = parseInt(reservation.start_date);
@@ -135,4 +151,11 @@ function handleEdit(event){
 function handleDelete(event){
     const confirm = window.confirm('Είσαι σίγουρος πως θέλεις να διαγράψεις την αίθουσα;');
     if(!confirm) return;
+    const id = window.location.href.split('/').pop();
+    postToServer('admin/reservations/classroom/delete', {id: id}).then(res => {
+        if(!res.success){
+            alert('Η διαγραφή απέτυχε');
+        }
+        window.location.href = '/';
+    });
 }

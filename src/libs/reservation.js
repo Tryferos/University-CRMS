@@ -297,3 +297,15 @@ const fetchClassroomReservations = (
 }
 
 exports.fetchClassroomReservations = fetchClassroomReservations;
+
+const deleteClassroom = (
+    db,
+    id,
+    callback,
+) => {
+    db.query(
+        `delete from uni.classroom where id=${id}`, callback
+    )
+}
+
+exports.deleteClassroom = deleteClassroom;

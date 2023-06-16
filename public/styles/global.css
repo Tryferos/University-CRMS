@@ -24,6 +24,7 @@
   }
   html, body {
     height: 100%;
+    margin-top: 75px;
   }
   body {
     line-height: 1.5;

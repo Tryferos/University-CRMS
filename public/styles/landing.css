@@ -1,4 +1,4 @@
-ul > form{
+.table-wrapper > ul > form{
     width: calc(5% + 200px);
     height: 50px;
     border: 1px solid var(--var-secondary);
@@ -9,7 +9,7 @@ ul > form{
     color: var(--var-secondary);
 }
 
-ul > form:hover, .btn2:hover, .btn2[selected='true'],ul > form > .btn:hover{
+.table-wrapper > ul > form:hover, .btn2:hover, .btn2[selected='true'],.table-wrapper > ul > form > .btn:hover{
     cursor: pointer;
     border: 1px solid var(--var-secondary);
     color: #ffffff;
@@ -45,7 +45,7 @@ h1 > span{
     font-size: 1em;
 }
 
-ul{
+.table-wrapper > ul{
     list-style: none;
     display: flex;
     justify-content: center;

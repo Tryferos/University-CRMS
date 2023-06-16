@@ -117,3 +117,47 @@ function handleFilter(id, value2, status1, rowNumber){
     });
 
 }
+
+window.addEventListener('load', async () => {
+    const self = await fetchFromServer('fetch-self');
+    let user;
+    if(!self.error && self.length!=0){
+        user = `${self[0].first_name} ${self[0].last_name} ${self[0].professor==1 ? `(${self[0].professor_role})` : ''}`
+    }else{
+        user = `Επισκέπτης`
+    }
+    const nav = document.createElement('nav');
+    const items = [];
+        fetchFromServer('roles').then(roles => {
+            items.push('<li><a href="/">Αρχική</a></li>')
+            if(roles.professor){
+                items.push('<li><a href="/professor/professor">Διδάσκων</a></li>');
+            }
+            if(roles.reserve_admin){
+                items.push('<li><a href="/admin/reservations">Κρατήσεις</a></li>');
+            }
+            if(roles.user_admin){
+                items.push('<li><a href="/admin/users">Χρήστες</a></li>');
+            }
+            if(items.length==1){
+                items.push('<li><a href="/login">Συνδέσου</a></li>');
+            }
+            else{
+                items.push('<li data-aside="true" class="discriminator"></li>');
+                items.push('<li><a href="/logout">Αποσύνδεση</a></li>');
+            }
+            nav.querySelector('.dropdown-navbar').innerHTML = items.join('');
+        })
+    nav.setAttribute('class', 'navbar-navbar')
+    nav.innerHTML = `
+        <img src="../images/aegean-logo.png"/>
+        <p class="name">${user}</p>
+        <div class="menu-navbar">
+        <img src="../images/menu.png"/>
+            <aside></aside>
+            <ul class="dropdown-navbar">
+            </ul>
+            </div>
+            `
+    document.body.appendChild(nav);
+});

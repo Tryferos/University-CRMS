@@ -3,7 +3,6 @@ article{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 75px;
     padding-bottom: 125px;
 }
 
@@ -37,8 +36,8 @@ article > h1, h1 > span{
     }
 }
 
-.admin{
-    display: flex;
+#admin{
+    display: none;
     gap: 1em;
 }
 
@@ -49,7 +48,7 @@ article > h1, h1 > span{
     outline: 2px solid #fff;
 }
 
-.admin > input{
+#admin > input{
     padding: 1rem;
     border-radius: 8px;
     outline: 2px solid var(--var-secondary);
@@ -61,7 +60,7 @@ article > h1, h1 > span{
     margin-top: 25px;
     margin-bottom: 25px;
 }
-.admin > input:hover{
+#admin > input:hover{
     background-color: var(--var-secondary);
     color: #FFF;
     cursor: pointer;
