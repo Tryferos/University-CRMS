@@ -8,6 +8,7 @@ window.addEventListener('load', async(ev) => {
 });
 
 function populateClassrooms(data){
+    console.log(data)
     const table = document.getElementById('classrooms-table');
     table.innerHTML = `
         <tr>
@@ -25,7 +26,9 @@ function populateClassrooms(data){
         row.setAttribute('id', 'classroom-row')
         row.addEventListener('click', handleClick);
         row.innerHTML = `
-            <td>${data[i].name}</td>
+            <td data-days='${data[i].weekly_availability}'
+            data-hours='${data[i].hourly_availability}'>
+            ${data[i].name}</td>
             <td>${data[i].address}</td>
             <td>${data[i].building}</td>
             <td>${data[i].capacity} άτομα</td>
@@ -36,6 +39,112 @@ function populateClassrooms(data){
         table.appendChild(row);
     }
 
+    const weeklyFrom = document.getElementById('weekly-from');
+    const weeklyTo = document.getElementById('weekly-to');
+
+    days.forEach((day, i) => {
+        const li = document.createElement('option');
+        li.setAttribute('value', i);
+        li.innerText = day;
+        weeklyFrom.appendChild(li);
+        weeklyTo.appendChild(li.cloneNode(true));
+    })
+
+    const hourlyFrom = document.getElementById('hourly-from');
+    const hourlyTo = document.getElementById('hourly-to');
+
+    for(let i=6; i<23; i++){
+        const li = document.createElement('option');
+        li.setAttribute('value', i);
+        li.innerText = `${i<10 ? '0' : ''}${i}:00`;
+        hourlyFrom.appendChild(li);
+        hourlyTo.appendChild(li.cloneNode(true));
+    }
+
+}
+
+function handleCapacityChange(ev){
+    const from = document.getElementById('capacity-from');
+    const to = document.getElementById('capacity-to');
+    from.setAttribute('max', to.value);
+    to.setAttribute('min', from.value);
+    const rows = document.querySelectorAll('tr#classroom-row');
+    rows.forEach((row,i) => {
+        const capacity = row.children[3].innerText.split(' ')[0];
+        if(parseInt(capacity)<=parseInt(to.value) && parseInt(capacity)>=parseInt(from.value)){
+            row.style.display = 'table-row';
+        }else{
+            row.style.display = 'none';
+        }
+    });
+}
+
+function handleHourlyFrom(ev){
+    const val = parseInt(ev.target.value);
+    const hourlyTo = document.getElementById('hourly-to');
+    if(parseInt(hourlyTo.value)<val){
+        hourlyTo.value = val;
+    }
+    for(let i=0; i<hourlyTo.children.length; i++){
+        if((i+6)<val){
+            hourlyTo.children[i].disabled = 'true';
+        }else{
+            hourlyTo.children[i].disabled = '';
+        }
+    }
+    filterHours()
+}
+
+function handleHourlyTo(ev){
+    filterHours()
+}
+
+function filterHours(){
+    const hourlyFrom = document.getElementById('hourly-from');
+    const hourlyTo = document.getElementById('hourly-to');
+    const rows = document.querySelectorAll('tr#classroom-row');
+    rows.forEach((row,i) => {
+        const values = row.children[0].getAttribute('data-hours').split(',');
+        if(parseInt(values[0]) >= parseInt(hourlyFrom.value) && 
+            parseInt(values[values.length-1]) <= parseInt(hourlyTo.value)){
+            row.style.display = 'table-row';
+        }else{
+            row.style.display = 'none';
+        }
+    });
+}
+
+function handleWeeklyFrom(ev){
+    const val = ev.target.value;
+    const weeklyTo = document.getElementById('weekly-to');
+    if(weeklyTo.value<val){
+        weeklyTo.value = val;
+    }
+    for(let i=0; i<weeklyTo.children.length; i++){
+        if(i<val){
+            weeklyTo.children[i].disabled = 'true';
+        }else{
+            weeklyTo.children[i].disabled = '';
+        }
+    }
+    filterDays()
+}
+function handleWeeklyTo(ev){
+    filterDays()
+}
+
+function filterDays(){
+    const weeklyFrom = document.getElementById('weekly-from');
+    const weeklyTo = document.getElementById('weekly-to');
+    const rows = document.querySelectorAll('tr#classroom-row');
+    rows.forEach((row,i) => {
+        const values = row.children[0].getAttribute('data-days').split(',');
+        if(values[0] >= weeklyFrom.value && values[values.length-1] <= weeklyTo.value){
+            row.style.display = 'table-row';
+        }else{
+            row.style.display = 'none';
+        }
+    });
 }
 
 function populateReservationsTable(data){

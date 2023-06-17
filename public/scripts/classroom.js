@@ -4,6 +4,7 @@ window.addEventListener('load', async(ev) => {
     populateReservations(data.reservations)
     const roles = await fetchFromServer('roles');
     populateButtons(roles)
+    document.title = `Αίθουσα - ${data.classroom.name}`;
 });
 
 function populateButtons(roles){

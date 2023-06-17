@@ -74,7 +74,6 @@ form{
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 100%;
 }
 
 .dates > div{
@@ -85,4 +84,44 @@ form{
 
 article{
     padding-bottom: 100px;
+}
+
+.filters-all{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+    gap: 1.25rem 0.5rem;;
+}
+
+.selections{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.select{
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.capacity{
+    width: 50%;
+}
+
+.dropdown, .capacity{
+    padding: 7px 9px;
+    outline: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+.dropdown:focus, .capacity:focus{
+    outline: 1px solid #868383;
 }

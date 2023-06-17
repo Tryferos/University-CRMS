@@ -119,6 +119,11 @@ function handleFilter(id, value2, status1, rowNumber){
 }
 
 window.addEventListener('load', async () => {
+    const rel = document.createElement('link');
+    rel.setAttribute('rel', 'icon');
+    rel.setAttribute('type', 'image/png');
+    rel.setAttribute('href', '../images/aegean-logo.png');
+    document.head.appendChild(rel);
     const self = await fetchFromServer('fetch-self');
     let user;
     if(!self.error && self.length!=0){
@@ -129,7 +134,8 @@ window.addEventListener('load', async () => {
     const nav = document.createElement('nav');
     const items = [];
         fetchFromServer('roles').then(roles => {
-            items.push('<li><a href="/">Αρχική</a></li>')
+            items.push('<li><a href="/">Αρχική</a></li>');
+            items.push('<li><a href="/account">Λογαριασμός</a></li>')
             if(roles.professor){
                 items.push('<li><a href="/professor/professor">Διδάσκων</a></li>');
             }

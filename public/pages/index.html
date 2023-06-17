@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Αρχική</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/navbar.css">
     <link rel="stylesheet" href="../styles/table.css">
@@ -21,17 +21,17 @@
                 <input onclick="handleChange(event)" id="reservation" class="btn2" type="button" value="Θεωρίες"/>
                 <input onclick="handleChange(event)" id="reservation" class="btn2" type="button" value="Εργαστήρια"/>
             </ul>
-            <div class="dates">
-                <label>Φιλτράρισμα με βάση ημερομηνία</label>
-                <div>
-                    <label>Από</label>
-                    <input id="date-from" type="datetime-local" onchange="handleDateFrom(event)"/>
+                <div class="dates">
+                    <label>Φιλτράρισμα με βάση ημερομηνία</label>
+                    <div>
+                        <label>Από</label>
+                        <input id="date-from" type="datetime-local" onchange="handleDateFrom(event)"/>
+                    </div>
+                    <div>
+                        <label>Έως</label>
+                        <input id="date-to" type="datetime-local" onchange="handleDateTo(event)"/>
+                    </div>
                 </div>
-                <div>
-                    <label>Έως</label>
-                    <input id="date-to" type="datetime-local" onchange="handleDateTo(event)"/>
-                </div>
-            </div>
             <div>
                 <table class="table" id="reservations-table">
 
@@ -45,6 +45,49 @@
                 <input onclick="handleChange(event)" id="classroom" class="btn2" type="button" value="Διδασκαλία"/>
                 <input onclick="handleChange(event)" id="classroom" class="btn2" type="button" value="Εργαστήριο"/>
             </ul>
+            <div class="filters-all">
+                <div class="dates">
+                    <label>Εβδομαδιαία διαθεσιμότητα</label>
+                    <div>
+                        <label>Από</label>
+                        <select id="weekly-from" class="dropdown" onchange="handleWeeklyFrom(event)">
+    
+                        </select>
+                    </div>
+                    <div>
+                        <label>Έως</label>
+                        <select id="weekly-to" class="dropdown" onchange="handleWeeklyTo(event)">
+    
+                        </select>
+                    </div>
+                </div>
+                <div class="dates">
+                    <label>Ωριαία διαθεσιμότητα</label>
+                    <div>
+                        <label>Από</label>
+                        <select id="hourly-from" class="dropdown" onchange="handleHourlyFrom(event)">
+    
+                        </select>
+                    </div>
+                    <div>
+                        <label>Έως</label>
+                        <select id="hourly-to" class="dropdown" onchange="handleHourlyTo(event)">
+    
+                        </select>
+                    </div>
+                </div>
+                <div class="dates">
+                    <label>Χωρητικότητα</label>
+                    <div>
+                        <label>Από</label>
+                        <input type="number" class="capacity" id="capacity-from" min="0" step="1" value="0" onchange="handleCapacityChange(event)"/>
+                    </div>
+                    <div>
+                        <label>Έως</label>
+                        <input type="number" class="capacity" id="capacity-to" min="0" step="1" value="160" onchange="handleCapacityChange(event)"/>
+                    </div>
+                </div>
+            </div>
             <div>
                 <table class="table" id="classrooms-table">
 

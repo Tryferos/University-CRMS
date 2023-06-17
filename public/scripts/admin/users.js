@@ -48,7 +48,6 @@ async function populateUsersTable(users){
     count.innerText = users.length;
 }
 async function populateApplicationsTable(users){
-    console.log(users)
     const table = document.getElementById('applications-table');
     table.innerHTML = '';
     const tr = document.createElement('tr');
@@ -90,7 +89,7 @@ async function populateApplicationsTable(users){
 function deleteUser(id){
     const confirm = window.confirm('Είσαι σίγουρος πως θέλεις να διαγράψεις τον χρήστη?')
     if(!confirm) return;
-    postToServer(`admin/delete-user`, {id: id}).then((data) => {
+    postToServer(`admin/users/delete-user`, {id: id}).then((data) => {
         if(data.success){
             window.alert('Η αποδοχή ήταν επιτυχής');
             window.location.reload();
@@ -101,9 +100,11 @@ function deleteUser(id){
 }
 
 function updateApplication(id, approval){
-    const confirm = window.confirm('Είσαι σίγουρος πως θέλεις να απορρίψεις την αίτηση?')
+    const confirm = approval==1 ? 
+    window.confirm('Είσαι σίγουρος πως θέλεις να αποδεχτής την αίτηση?') : 
+    window.confirm('Είσαι σίγουρος πως θέλεις να απορρίψεις την αίτηση?')
     if(!confirm) return;
-    postToServer(`admin/application`, {id: id, approval: approval}).then((data) => {
+    postToServer(`admin/users/application`, {id: id, approval: approval}).then((data) => {
         if(data.success){
             window.alert('Η αποδοχή ήταν επιτυχής');
             window.location.reload();

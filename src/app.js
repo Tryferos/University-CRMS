@@ -36,6 +36,7 @@ exports.db = db;
 const sessionObjectName = 'userid'
 
 const files = {
+    account: path.join(__dirname, '../public/pages/account.html'),
     index: path.join(__dirname, '../public/pages/index.html'),
     login: path.join(__dirname, '../public/pages/login.html'),
     classroom: path.join(__dirname, '../public/pages/classroom.html'),
@@ -472,6 +473,10 @@ app.post('/register', (req, res) => {
         res.redirect('/')
     });
 });
+
+app.get('/account', (req, res) => {
+    res.sendFile(files.account);
+})
 
 
 app.get('/', (req, res) => {
