@@ -86,7 +86,9 @@ td[data-status='Εργαστήριο']{
 }
 
 #classroom-row:hover 
-td[data-status='Θεωρία'], #classroom-row:hover td[data-status='Διδασκαλία']{
+td[data-status='Θεωρία'], #classroom-row:hover td[data-status='Διδασκαλία'],
+#reservation-row:hover 
+td[data-status='Θεωρία'], #reservation:hover td[data-status='Διδασκαλία']{
     color: white;
 }
 

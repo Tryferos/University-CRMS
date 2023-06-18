@@ -58,14 +58,14 @@ function millisToDate(millis){
 
 function millisToDateReverse(millis){
     const date = new Date(millis);
-    const month = (date.getMonth()+1) <= 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
+    const month = (date.getMonth()+1) < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
     const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     return `${date.getFullYear()}-${month}-${day}`
 }
 
 function msToDate(ms){
     const date = new Date(ms);
-    const month = (date.getMonth()+1) <= 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
+    const month = (date.getMonth()+1) < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
     const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
     const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
@@ -80,7 +80,7 @@ function formatDays(day){
 
 function millisToDateTimeLocal(millis){
     const date = new Date(millis);
-    const month = (date.getMonth()+1) <= 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
+    const month = (date.getMonth()+1) < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1;
     const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
     const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();

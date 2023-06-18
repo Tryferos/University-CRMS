@@ -166,10 +166,10 @@ async function populateReservationsTable(data){
     for(let i=0; i<data.length; i++){
         const row = document.createElement('tr');
         if(!self.error && self[0].reserve_admin==1){
-            row.setAttribute('id', 'reservation-row')
             row.addEventListener('click', handleClickReservation);
-            row.setAttribute('data-id', data[i].lid);
         }
+        row.setAttribute('id', 'reservation-row')
+        row.setAttribute('data-id', data[i].lid);
         row.innerHTML = `
             <td data-start_date='${data[i].start_date}' 
             data-end_date='${data[i].end_date}' data-day='${data[i].day}'

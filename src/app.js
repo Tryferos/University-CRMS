@@ -3,10 +3,10 @@ const path = require('path');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mysql = require('mysql2');
-const dotenv = require('dotenv');
 const user = require('./libs/user');
 const reservation = require('./libs/reservation');
 
+const dotenv = require('dotenv');
 dotenv.config({path: path.join(__dirname, '../.env.local')});
 
 const app = express()
@@ -595,6 +595,7 @@ app.post('/admin/users/application', (req, res) => {
 app.post('/register', (req, res) => {
     const body = req.body;
     user.insertUser(db, body, (err, result) => {
+        console.log(err)
         if(err){
             res.redirect('/register?error_code=506')
             return;
@@ -653,4 +654,129 @@ app.post('/admin/reservations/classroom/delete', (req, res) => {
 
 app.listen(port, () => {
     console.log('running in: '+`http://localhost:${port}`)
+
+    db.query(
+        `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME};`
+    )
+
+    db.query(
+        `USE ${process.env.DB_NAME};`
+    )
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS departments(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            title VARCHAR(255) NOT NULL UNIQUE
+            );`
+    )
+
+    db.promise().query(
+        `select * from ${process.env.DB_NAME}.departments;`
+    ).then(([rows, fields]) => {
+        if(rows.length==0){
+            db.query(
+                `insert into departments (id,title) values (1,'Τμήμα Μηχανικών Πληροφοριακών και Επικοινωνιακών Συστημάτων'), (5,'Τμήμα Στατιστικής και Αναλογιστικών – Χρηματοοικονομικών Μαθηματικών'), (6,'Τμήμα Μαθηματικών')`
+            )
+        }
+
+    });
+
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS user(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
+            professor BOOLEAN NOT NULL DEFAULT 0,
+            professor_role ENUM('ΔΕΠ', 'ΕΔΙΠ', 'ΕΤΕΠ'),
+            user_admin BOOLEAN NOT NULL DEFAULT 0,
+            reserve_admin BOOLEAN NOT NULL DEFAULT 0,
+            approved BOOLEAN NOT NULL DEFAULT 0,
+            date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            department INT,
+            foreign key (department) references departments(id) on delete cascade on update cascade,
+            constraint unique_person unique (email, first_name, last_name)
+            );
+        `);
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS classroom(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            capacity INT NOT NULL,
+            building VARCHAR(255) NOT NULL,
+            address VARCHAR(255) NOT NULL,
+            pc_count INT,
+            projector BOOLEAN NOT NULL DEFAULT 0,
+            always_locked BOOLEAN NOT NULL DEFAULT 0,
+            type ENUM('Εργαστήριο', 'Διδασκαλία'),
+            weekly_availability SET('0', '1', '2', '3', '4', '5', '6'),
+            hourly_availability SET('6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'),
+            constraint unique_classroom unique (name, building, address)
+        );`
+    );
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS lecture(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            department INT,
+            code VARCHAR(255) NOT NULL,
+            semester INT NOT NULL,
+            lecture_hours INT NOT NULL,
+            type ENUM('Θεωρία', 'Εργαστήριο'),
+            foreign key (department) references departments(id) on delete cascade on update cascade,
+            constraint unique_lecture unique (name, department),
+            check (semester>=1 and semester<=10)
+        );`
+    )
+
+    db.query(
+        `create table if not exists LectureProfessors (
+            lid int not null,
+            uid int not null,
+            constraint Lecturer primary key (lid, uid),
+            constraint foreign key (lid) references ${process.env.DB_NAME}.lecture(id) on delete cascade on update cascade,
+            constraint foreign key (uid) references ${process.env.DB_NAME}.user(id) on delete cascade on update cascade
+            );`
+    );
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS reservation(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            creation_date BIGINT NOT NULL,
+            start_date BIGINT NOT NULL,
+            end_date BIGINT NOT NULL,
+            day ENUM('0', '1', '2', '3', '4', '5', '6') NOT NULL,
+            hour ENUM('6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22') NOT NULL,
+            duration_minutes INT NOT NULL,
+            lid INT NOT NULL,
+            cid INT NOT NULL,
+            constraint foreign key (lid) references ${process.env.DB_NAME}.lecture(id) on delete cascade on update cascade,
+            constraint foreign key (cid) references ${process.env.DB_NAME}.classroom(id) on delete cascade on update cascade,
+            constraint unique_reservation unique (start_date, end_date, day, hour, cid)
+            );`
+    );
+
+    db.query(
+        `CREATE TABLE IF NOT EXISTS substitution(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            creation_date BIGINT NOT NULL,
+            initial_reservation_date BIGINT NOT NULL,
+            substitution_date BIGINT NOT NULL,
+            hour ENUM('6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22') NOT NULL,
+            status ENUM('Εκκρεμούσα', 'Εγκεκριμένη', 'Μη Εγκεκριμένη') not null default 'Εκκρεμούσα',
+            reason VARCHAR(255),
+            duration_minutes INT NOT NULL,
+            rid INT NOT NULL,
+            cid INT NOT NULL,
+            constraint foreign key (rid) references ${process.env.DB_NAME}.reservation(id) on delete cascade on update cascade,
+            constraint foreign key (cid) references ${process.env.DB_NAME}.classroom(id) on delete cascade on update cascade,
+            constraint unique_substitution unique (substitution_date, cid)
+            );`
+    );
+            
+
 });
