@@ -36,12 +36,13 @@ function handleEdit(ev){
 }
 
 function handleSubmitClick(event){
+    console.log('gamiese')
     event.preventDefault();
     event.stopPropagation();
     const id = parseInt(location.href.split('/').pop());
     console.log(id)
     const form = event.target.parentElement;
-    if(!id){
+    if(!parseInt(id)){
         if(form.checkValidity()){
             form.submit();
         }
@@ -50,6 +51,7 @@ function handleSubmitClick(event){
     if(form.checkValidity()){
         const input = form.querySelector('input[data-type="input"]');
         console.log(`edit-self/${input.id}/${id}`)
+        console.log('posting')
         postToServer(`edit-self/${input.id}/${id}`, {[input.id]: input.value}).then(res => {
             console.log(res)
             if(res.success==true){

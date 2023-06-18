@@ -8,7 +8,6 @@ window.addEventListener('load', async(ev) => {
 });
 
 function populateClassrooms(data){
-    console.log(data)
     const table = document.getElementById('classrooms-table');
     table.innerHTML = `
         <tr>
@@ -147,7 +146,8 @@ function filterDays(){
     });
 }
 
-function populateReservationsTable(data){
+async function populateReservationsTable(data){
+    const self = await fetchFromServer(`fetch-self`)
     const table = document.getElementById('reservations-table');
     table.innerHTML = `
         <tr>
@@ -165,7 +165,11 @@ function populateReservationsTable(data){
             `;
     for(let i=0; i<data.length; i++){
         const row = document.createElement('tr');
-        row.setAttribute('id', 'reservation-row')
+        if(!self.error && self[0].reserve_admin==1){
+            row.setAttribute('id', 'reservation-row')
+            row.addEventListener('click', handleClickReservation);
+            row.setAttribute('data-id', data[i].lid);
+        }
         row.innerHTML = `
             <td data-start_date='${data[i].start_date}' 
             data-end_date='${data[i].end_date}' data-day='${data[i].day}'
@@ -184,7 +188,10 @@ function populateReservationsTable(data){
     }
             
 }
-
+function handleClickReservation(ev){
+    const id = ev.currentTarget.getAttribute('data-id');
+    location.href = `/admin/reservations/lecture/${id}`;
+}
 function handleClick(ev){
     const id = ev.currentTarget.getAttribute('data-id');
     location.href = `/classroom/${id}`;

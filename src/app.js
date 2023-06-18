@@ -148,7 +148,6 @@ function adminMiddleware(req, res, next){
 app.post('/edit-self/:property', (req, res) => {
     const property = req.params.property;
     const value = req.body[property];
-    console.log(property, value)
     const validProperties = ['email', 'first_name', 'last_name', 'password'];
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         if(err || result.length==0){
@@ -341,7 +340,6 @@ app.get('/fetch-lecture/:id', (req, res) => {
             return;
         }
         reservation.fetchLecture(db, req.params.id, result[0].department,(err, result) => {
-            console.log(err)
             if(err){
                 res.status(500).send({error: 'Error'})
                 return;
@@ -351,13 +349,19 @@ app.get('/fetch-lecture/:id', (req, res) => {
     });
 });
 app.get('/fetch-reservation/:id', (req, res) => {
-    // reservation.fetchReservation(db, req.params.id, (err, result) => {
-    //     if(err){
-    //         res.status(500).send({error: 'Error'})
-    //         return;
-    //     }
-    //     res.send(result);
-    // });
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.send({error: true})
+            return;
+        }
+        reservation.fetchReservation(db, req.params.id, result[0].department,(err, result) => {
+            if(err){
+                res.status(500).send({error: 'Error'})
+                return;
+            }
+            res.send(result);
+        });
+    });
 })
 app.get('/fetch-reservations', (req, res) => {
     user.fetchDepartment(db, req.session[sessionObjectName], (err1, department) => {
@@ -476,15 +480,19 @@ app.post('/admin/reservations/lecture', (req, res) => {
 app.get('/admin/reservations/reservation', (req, res) => {
     res.sendFile(files.admin.reservations.reservation);
 });
+app.get('/admin/reservations/reservation/:id', (req, res) => {
+    res.sendFile(files.admin.reservations.reservation);
+});
 app.post('/admin/reservations/reservation', (req, res) => {
     reservation.insertReservation(db, req.body, (err, result) => {
+        const id = req.body.id ? `/${req.body.id}` : '';
         if(err){
-            res.redirect('/admin/reservations/reservation?error_code=504')
+            res.redirect(`/admin/reservations/reservation${id}?error_code=504`)
             return;
         }
         user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
             if(err){
-                res.redirect('/admin/reservations/reservation?error_code=504')
+                res.redirect(`/admin/reservations/reservation${id}?error_code=504`)
                 return;
             }
             const user = result[0];

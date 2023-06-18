@@ -95,7 +95,7 @@ td[data-status='Εργαστήριο']{
     color: white;
 }
 
-#classroom-row:hover, #users-table-row:hover{
+#classroom-row:hover, #users-table-row:hover, #reservation-row:hover{
     background-color: var(--var-secondary);
     color: white;
 }

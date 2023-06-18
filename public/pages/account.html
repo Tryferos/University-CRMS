@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../styles/global.css">
-    <link rel="stylesheet" href="../styles/global.css">
-    <link rel="stylesheet" href="../styles/navbar.css">
-    <link rel="stylesheet" href="../styles/account.css">
+    <link rel="stylesheet" href="http://localhost:3000/styles/global.css">
+    <link rel="stylesheet" href="http://localhost:3000/styles/global.css">
+    <link rel="stylesheet" href="http://localhost:3000/styles/navbar.css">
+    <link rel="stylesheet" href="http://localhost:3000/styles/account.css">
 </head>
-<script src="../scripts/global.js"></script>
-<script src="../scripts/account.js"></script>
+<script src="http://localhost:3000/scripts/global.js"></script>
+<script src="http://localhost:3000/scripts/account.js"></script>
 <body>
     <article class="signin">
         <header>
@@ -26,7 +26,7 @@
                         required
                         pattern="[a-zA-Z0-9@\.]{4,40}" 
                         placeholder="Εισάγετε το email σας">
-                        <button id="submit-email" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                        <button onclick='handleSubmitClick(event)' id="submit-email" class="btn hidden">Ενημέρωση στοιχείων</button>
                     </form>
                     <form method="post" action="/edit-self/password">
                         <div>Κωδικός: </div>
@@ -36,7 +36,7 @@
                         required
                         pattern=".*{6,40}]"
                         placeholder="Εισάγετε τον κωδικό σας">
-                        <button id="submit-password" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                        <button  onclick='handleSubmitClick(event)' id="submit-password" class="btn hidden">Ενημέρωση στοιχείων</button>
                     </form>
                     <form method="post" action="/edit-self/first_name">
                         <div>Όνομα: </div>
@@ -46,7 +46,7 @@
                         required
                         pattern=".*{8,28}]"
                         placeholder="Εισάγετε το όνομα σας">
-                        <button id="submit-first_name" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                        <button onclick='handleSubmitClick(event)' id="submit-first_name" class="btn hidden">Ενημέρωση στοιχείων</button>
                     </form>
                     <form method="post" action="/edit-self/last_name">
                         <div>Επίθετο: </div>

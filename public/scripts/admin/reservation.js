@@ -18,9 +18,34 @@ window.addEventListener('load', async function(){
     populateHours();
     const classrooms = await fetchFromServer('admin/reservations/fetch-classrooms');
     const lectures = await fetchFromServer('admin/reservations/fetch-lectures');
+    const id = parseInt(location.href.split('/').pop());
     populateClassrooms(classrooms);
     populateLectures(lectures);
+    if(parseInt(id)){
+        populateForm((await fetchFromServer(`fetch-reservation/${id}`))[0]);
+    }
 });
+
+function populateForm(data){
+    console.log(data)
+    const lid = document.getElementById('lid');
+    const cid = document.getElementById('cid');
+    const day = document.getElementById('day');
+    const hour = document.getElementById('hour');
+    const duration = document.getElementById('duration_minutes');
+    const start_date = document.getElementById('start_date');
+    const end_date = document.getElementById('end_date');
+    lid.value = data.lid;
+    cid.value = data.cid;
+    const item = cid.querySelector(`option[value="${data.cid}"]`)
+    populateClassroomDetails(item.dataset);
+    day.value = data.day;
+    hour.value = data.hour;
+    duration.value = data.duration_minutes;
+    start_date.value = millisToDateReverse(data.start_date);
+    end_date.value = millisToDateReverse(data.end_date);
+    document.getElementById('form-values').appendChild(createHiddenInput('id', data.id));
+}
 
 function handleClassroomChange(ev){
     const dataset = ev.target.options[ev.target.selectedIndex].dataset;

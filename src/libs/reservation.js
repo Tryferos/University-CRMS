@@ -214,6 +214,13 @@ const insertReservation = (
     const creation_date = new Date().getTime();
     const start_date = new Date(body.start_date).getTime();
     const end_date = new Date(body.end_date).getTime();
+    if(body.id){
+        db.query(
+            `update uni.reservation set lid=?, cid=?, day=?, hour=?, duration_minutes=?, start_date=?, end_date=?, creation_date=? where id=?`, 
+            [body.lid, body.cid, body.day, body.hour, body.duration_minutes, start_date, end_date, creation_date, body.id], callback
+        )
+        return;
+    }
     db.query(
         `insert into uni.reservation (lid, cid, day, hour, duration_minutes, start_date, end_date, creation_date) 
         values (?,?,?,?,?,?,?,?)`, 
@@ -245,8 +252,8 @@ const fetchReservations = (
     db.query(
         `select r.start_date,r.end_date,r.day,r.hour,r.id,
         r.duration_minutes,c.name as classroom_name,c.building,c.address,d.title,l.name as lecture_name,l.code,l.type,l.semester,l.lecture_hours from 
-        uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d, uni.lectureprofessors lp
-        where l.id=r.lid and lp.lid=l.id and l.department=${id} and c.id=r.cid and d.id=l.department`, callback
+        uni.reservation r, uni.lecture l, uni.classroom c, uni.departments d
+        where l.id=r.lid and l.department=${id} and c.id=r.cid and d.id=l.department`, callback
     )
 }
 
@@ -285,6 +292,7 @@ const fetchReservationsAll = (
             }
             const newRes = res.map(lecture => {
                 return {
+                    lid: lecture.lid,
                     code: lecture.code, department: lecture.title, id: lecture.id,lid:lecture.lid, 
                     deprtment_id: lecture.department_id,
                     lecture_hours: lecture.lecture_hours, lecture_name: lecture.lecture_name, 
@@ -366,3 +374,19 @@ const deleteClassroom = (
 }
 
 exports.deleteClassroom = deleteClassroom;
+
+const fetchReservation = (
+    db,
+    id,
+    department,
+    callback
+) => {
+    db.query(
+        `select r.start_date,r.end_date,r.day,r.hour,r.id,r.duration_minutes, r.lid, r.cid from 
+        uni.reservation r, uni.departments d, uni.lecture l
+        where l.id=r.lid and l.department=${department} and d.id=l.department and r.id=${id}`, callback
+    )
+    
+}
+
+exports.fetchReservation = fetchReservation;

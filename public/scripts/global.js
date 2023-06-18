@@ -90,7 +90,9 @@ function millisToDateTimeLocal(millis){
 window.addEventListener('load', async () => {
     const dates = document.querySelectorAll('input[type="date"');
     dates.forEach(date => {
-        date.setAttribute('min', millisToDateReverse(Date.now()));
+        if(!parseInt(location.href.split('/').pop())){
+            date.setAttribute('min', millisToDateReverse(Date.now()));
+        }
     });
 });
 

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../../styles/global.css">
-    <link rel="stylesheet" type="text/css" href="../../styles/navbar.css">
-    <link rel="stylesheet" type="text/css" href="../../styles/admin/creation.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/styles/global.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/styles/admin/creation.css">
     <title>Δημιουργία κράτησης</title>
 </head>
-<script src="../../scripts/global.js"></script>
-<script src="../../scripts/admin/reservation.js"></script>
+<script src="http://localhost:3000/scripts/global.js"></script>
+<script src="http://localhost:3000/scripts/admin/reservation.js"></script>
 <body>
     <form action="/admin/reservations/reservation" method="post">
         <h1>Δημιουργία Κράτησης</h1>
-        <fieldset>
+        <fieldset id="form-values">
             <div>
                 <label id="" for="start_date">Έναρξη Κράτησης<span aria-label="required">*</span></label>
                 <input required type="date" id="start_date" name="start_date" 
