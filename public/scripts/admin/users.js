@@ -29,6 +29,10 @@ async function populateUsersTable(users){
     table.appendChild(tr);
     users.forEach((user) => {
         const tr = document.createElement('tr');
+        tr.addEventListener('click', () => {
+            window.location.href = `/account/${user.id}`;
+        });
+        tr.setAttribute('id', 'users-table-row')
         tr.innerHTML = `
             <td title='${user.email}'>${user.email}</td>
             <td title='${user.first_name}'>${user.first_name}</td>
