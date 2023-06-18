@@ -24,6 +24,14 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+
+//Δημιουργήστε ένα αρχείο με όνομα .env.local στο root του project
+//Στο αρχείο αυτό προσθέστε τις παρακάτω γραμμές:
+//DB_HOST=localhost
+//DB_PORT=3306
+//DB_USER=root
+//DB_PASSWORD= --Κωδικός της mysql βάσης σας--
+//DB_NAME= --Όνομα της mysql βάσης σας--
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -72,7 +80,7 @@ function authMiddleware(req, res, next) {
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query) 
     && !query.startsWith('/classroom/') && !query.startsWith('/fetch-classroom/')) {
         if(req.method.toLowerCase()=='get'){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=498')
             return;
         }
         res.send({error: true})
@@ -90,7 +98,7 @@ function professorMiddleware(req, res, next){
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         const user = result[0];
         if(err || user.approved!=1 || user.professor!=1){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=496')
             return;
         }
         next();
@@ -112,7 +120,7 @@ function adminMiddleware(req, res, next){
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
         const user = result[0];
         if(err){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=494')
             return;
         }
         const professor = [
@@ -126,19 +134,19 @@ function adminMiddleware(req, res, next){
             return;
         }
         if((user.user_admin!=1 && user.reserve_admin!=1) || user.approved!=1){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=494')
             return;
         }
         if(path.includes('/admin') && user.user_admin!=1 && user.reserve_admin!=1){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=494')
             return;
         }
         if(path.includes('/admin/users') && user.user_admin!=1){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=494')
             return;
         }
         if(path.includes('/admin/reservations') && user.reserve_admin!=1){
-            res.redirect('/login?error_code=500')
+            res.redirect('/login?error_code=494')
             return;
         }
         next();
