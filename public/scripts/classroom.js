@@ -146,6 +146,7 @@ function populateReservations(data){
 }
 
 function handleEdit(event){
+    location.href = `/admin/reservations/classroom/${window.location.href.split('/').pop()}`;
 
 }
 

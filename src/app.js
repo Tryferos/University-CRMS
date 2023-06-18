@@ -223,6 +223,12 @@ app.get('/professor/reserve', (req, res) => {
     res.sendFile(files.professor.reserve);
 });
 
+app.get('/admin/reservations/classroom/:id', (req, res) => {
+    res.sendFile(files.admin.reservations.classroom);
+});
+app.get('/admin/reservations/lecture/:id', (req, res) => {
+    res.sendFile(files.admin.reservations.lecture);
+});
 
 app.get('/classroom/:id', (req, res) => {
     res.sendFile(files.classroom);
@@ -328,7 +334,31 @@ app.get('/fetch-reservations-all', (req, res) => {
         res.send(result);
     });
 })
-
+app.get('/fetch-lecture/:id', (req, res) => {
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.send({error: true})
+            return;
+        }
+        reservation.fetchLecture(db, req.params.id, result[0].department,(err, result) => {
+            console.log(err)
+            if(err){
+                res.status(500).send({error: 'Error'})
+                return;
+            }
+            res.send(result);
+        });
+    });
+});
+app.get('/fetch-reservation/:id', (req, res) => {
+    // reservation.fetchReservation(db, req.params.id, (err, result) => {
+    //     if(err){
+    //         res.status(500).send({error: 'Error'})
+    //         return;
+    //     }
+    //     res.send(result);
+    // });
+})
 app.get('/fetch-reservations', (req, res) => {
     user.fetchDepartment(db, req.session[sessionObjectName], (err1, department) => {
         if(err1){
@@ -424,6 +454,10 @@ app.get('/admin/reservations/lecture', (req, res) => {
 });
 
 app.post('/admin/reservations/lecture', (req, res) => {
+    if(!req.body.professors){
+        res.redirect(`/admin/reservations/lecture${req.body.id ? `/${req.body.id}` : ''}?error_code=512`)
+        return;
+    }
     user.fetchDepartment(db, req.session[sessionObjectName],(err, result) => {
         if(err){
             res.status(500).send({error: 'Error'})

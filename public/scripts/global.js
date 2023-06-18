@@ -5,6 +5,7 @@ const error_codes = {
     506: 'Το email χρησιμοποιείται ήδη',
     508: 'Η τιμή που εισάγατε είναι η ίδια με την προηγούμενη',
     510: 'Δεν μπορείται να αλλάξετε αυτή την τιμή',
+    512: 'Πρέπει να εισάγεται τουλάχιστον έναν διδάσκων.'
 }
 
 
@@ -126,7 +127,7 @@ window.addEventListener('load', async () => {
     const rel = document.createElement('link');
     rel.setAttribute('rel', 'icon');
     rel.setAttribute('type', 'image/png');
-    rel.setAttribute('href', '../images/aegean-logo.png');
+    rel.setAttribute('href', 'http://localhost:3000/images/aegean-logo.png');
     document.head.appendChild(rel);
     const self = await fetchFromServer(`fetch-self`)
     let user;
@@ -168,10 +169,10 @@ window.addEventListener('load', async () => {
         })
     nav.setAttribute('class', 'navbar-navbar')
     nav.innerHTML = `
-        <img src="../images/aegean-logo.png"/>
+        <img src="http://localhost:3000/images/aegean-logo.png"/>
         <p class="name">${user}</p>
         <div class="menu-navbar">
-        <img src="../images/menu.png"/>
+        <img src="http://localhost:3000/images/menu.png"/>
             <aside></aside>
             <ul class="dropdown-navbar">
             </ul>
@@ -180,3 +181,10 @@ window.addEventListener('load', async () => {
     document.body.appendChild(nav);
 });
 
+function createHiddenInput(name, value){
+    const input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', name);
+    input.setAttribute('value', value);
+    return input;
+}

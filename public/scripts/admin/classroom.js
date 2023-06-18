@@ -19,10 +19,51 @@ function hidePcCount(){
     pcCount.style.display = 'none';
 }
 
-window.addEventListener('load', function(){
+window.addEventListener('load', async function(){
     populateWeeklyDays();
     populateHourly();
+    const id = parseInt(location.href.split('/').pop());
+    if(!parseInt(id))return;
+    const data = await fetchFromServer(`fetch-classroom/${id}`)
+    console.log(data.classroom)
+    populateForm(data.classroom)
 });
+
+function populateForm(data){
+    const name = document.getElementById('name');
+    const type = document.getElementById('type');
+    const pcCount = document.getElementById('pc-count');
+    const address = document.getElementById('address');
+    const building = document.getElementById('building');
+    const alwaysLocked = document.getElementById('always_locked');
+    const projector = document.getElementById('projector');
+    const capacity = document.getElementById('capacity');
+    capacity.value = data.capacity;
+    alwaysLocked.value = data.always_locked;
+    projector.value = data.projector;
+    name.value = data.name;
+    type.value = data.type;
+    address.value = data.address;
+    building.value = data.building;
+    if(data.type=='Διδασκαλία'){
+        hidePcCount();
+    }else{
+        showPcCount();
+        pcCount.value = data.pc_count;
+    }
+    data.hourly_availability.split(',').forEach(hour => {
+        const input = document.getElementById(hour);
+        input.checked = true;
+    });
+    data.weekly_availability.split(',').forEach(day => {
+        const input = document.getElementById(day);
+        input.checked = true;
+    });
+    document.getElementById('form-values').appendChild(
+        createHiddenInput('id', data.id)
+        );
+}
+
 
 function handleBack(ev){
     ev.preventDefault();

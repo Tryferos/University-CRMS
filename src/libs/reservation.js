@@ -17,6 +17,13 @@ const insertClassroom = (
     body,
     callback,
 ) => {
+    if(body.id){
+        db.query(
+            `update uni.classroom set name=?, building=?, address=?, capacity=?, type=?, pc_count=?, projector=?, always_locked=?, weekly_availability=?, hourly_availability=? where id=?`, 
+            [body.name, body.building, body.address, body.capacity, body.type, body.pc_coount, body.projector, body.always_locked, body.weekly_availability.join(','), body.hourly_availability.join(','), body.id], callback
+        )
+        return;
+    }
     db.query(
         `insert into uni.classroom (name, building, address, capacity, type, pc_count, projector, always_locked, weekly_availability, hourly_availability) 
         values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
@@ -55,6 +62,29 @@ const insertLecture = (
     department,
     callback,
 ) => {
+    if(body.id){
+        db.query(
+            `update uni.lecture set name=?, code=?, type=?, semester=?, lecture_hours=?, department=? where id=?`, 
+            [body.name, body.code, body.type, body.semester, body.lecture_hours, department, body.id], (err, res) => {
+                let values = [];
+                try{
+                    values = body.professors.map(uid => `(${body.id}, ${uid})`).join(',');
+                }catch(error){
+                    if(!body.professors){
+                        callback(null, res);
+                        return;
+                    }
+                    values = `(${body.id}, ${body.professors})`;
+                }
+                db.promise().query(`delete from uni.lectureprofessors where lid=${body.id}`).then(res => {
+                    db.query(
+                        `insert into uni.lectureprofessors (lid, uid) values ${values}`, callback
+                    )
+                    });
+            }
+        )
+        return;
+    }
     db.query(
         `insert into uni.lecture (name, code, type, semester, lecture_hours, department) values (?,?,?,?,?,?)`, [body.name, body.code, body.type, body.semester, body.lecture_hours, department], (err, res) => {
             if(err){
@@ -91,6 +121,33 @@ const fetchClassrooms = (
 }
 
 exports.fetchClassrooms = fetchClassrooms;
+
+const fetchLecture = (
+    db,
+    id,
+    department,
+    callback
+) => {
+    db.query(
+        `select * from uni.lecture where id=${id} and department=${department}`, (err, res) => {
+            if(err){
+                callback(err, null);
+                return;
+            }
+            db.query(
+                `select * from uni.lectureprofessors lp, uni.user s where lid=${res[0].id} and s.id=lp.uid`, (err, result) => {
+                    if(err){
+                        callback(err, null);
+                        return;
+                    }
+                    callback(null, {...res[0], professors: result.map(professor => professor.uid)})
+                }
+            )
+        }
+    )
+}
+
+exports.fetchLecture = fetchLecture;
 
 const fetchLectures = (
     db,
