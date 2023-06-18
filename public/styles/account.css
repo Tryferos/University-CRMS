@@ -1,0 +1,95 @@
+article{
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+article > header >h2{
+    font-size: 1em;
+}
+article > header >h2 > span{
+    font-size: 1.25em;
+}
+
+fieldset{
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+.btn{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: var(--var-secondary);
+    padding: 0.5rem 1rem;
+    outline: 1px solid var(--var-secondary);
+    border-radius: 4px;
+}
+
+.btn:hover{
+    cursor: pointer;
+    color: #ffffff;
+    background-color: var(--var-secondary);
+}
+#fields-list{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+#fields-list > form{
+    flex-wrap: wrap;
+    display: flex;
+    gap: 1rem;
+    width: clamp(300px, 60%, 900px);
+    justify-content: space-between;
+}
+
+#fields-list > form > div{
+    display: flex;
+    gap: 2rem;
+}
+
+#fields-list > form > div > label{
+    font-size: 1.1em;
+}
+
+.hidden{
+    display: none;
+}
+
+@media screen and (max-width: 768px){
+    #fields-list > form{
+        flex-direction: column;
+    }
+
+    #fields-list{
+        gap: 2rem;
+    }
+
+    .btn{
+        max-width: 175px;
+    }
+    
+}
+
+input[data-type='input']{
+    padding: 14px 18px;
+    border-radius: 4px;
+    outline: 1px solid #ccc;
+    border: none;
+}
+input[data-type='input']:focus{
+    border: none;
+    outline: 1px solid #868383;
+}

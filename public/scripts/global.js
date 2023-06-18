@@ -3,20 +3,10 @@ const error_codes = {
     502: 'Η αίτηση εγγραφής σας δεν έχει εγκριθεί ακόμα',
     504: 'Υπάρχει είδη κράτηση στο ίδιο χρονικό διάστημα και αίθουσα',
     506: 'Το email χρησιμοποιείται ήδη',
+    508: 'Η τιμή που εισάγατε είναι η ίδια με την προηγούμενη',
+    510: 'Δεν μπορείται να αλλάξετε αυτή την τιμή',
 }
 
-async function fetchFromServer(path){
-    return new Promise((res, rej) => {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function(){
-            if(this.readyState==4 && this.status==200){
-                res(JSON.parse(this.responseText))
-            }
-        }
-        xhttp.open("GET", `http://${location.hostname+":"+location.port}/${path}`, true);
-        xhttp.send();
-    });
-}
 
 async function postToServer(path, data){
     return new Promise((res, rej) => {
@@ -29,6 +19,20 @@ async function postToServer(path, data){
         xhttp.open("POST", `http://${location.hostname+":"+location.port}/${path}`, true);
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify(data));
+    });
+}
+
+async function fetchFromServer(path){
+    return new Promise(async(res, rej) => {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if(this.readyState==4 && this.status==200){
+                res(JSON.parse(this.responseText))
+            }
+        }
+        xhttp.open("GET", `http://${location.hostname+":"+location.port}/${path}`, true);
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(null);
     });
 }
 
@@ -124,7 +128,7 @@ window.addEventListener('load', async () => {
     rel.setAttribute('type', 'image/png');
     rel.setAttribute('href', '../images/aegean-logo.png');
     document.head.appendChild(rel);
-    const self = await fetchFromServer('fetch-self');
+    const self = await fetchFromServer(`fetch-self`)
     let user;
     if(!self.error && self.length!=0){
         user = `${self[0].first_name} ${self[0].last_name} ${self[0].professor==1 ? `(${self[0].professor_role})` : ''}`
@@ -135,7 +139,6 @@ window.addEventListener('load', async () => {
     const items = [];
         fetchFromServer('roles').then(roles => {
             items.push('<li><a href="/">Αρχική</a></li>');
-            items.push('<li><a href="/account">Λογαριασμός</a></li>')
             if(roles.professor){
                 items.push('<li><a href="/professor/professor">Διδάσκων</a></li>');
             }
@@ -149,6 +152,15 @@ window.addEventListener('load', async () => {
                 items.push('<li><a href="/login">Συνδέσου</a></li>');
             }
             else{
+                //push items of the array one index further
+                items.push('')
+                let tmp = items[1];
+                for(let i=1; i<items.length-1; i++){
+                    const tmp2 = items[i+1];
+                    items[i+1] = tmp;
+                    tmp = tmp2;
+                }
+                items[1] = '<li><a href="/account">Λογαριασμός</a></li>';
                 items.push('<li data-aside="true" class="discriminator"></li>');
                 items.push('<li><a href="/logout">Αποσύνδεση</a></li>');
             }
@@ -167,3 +179,4 @@ window.addEventListener('load', async () => {
             `
     document.body.appendChild(nav);
 });
+

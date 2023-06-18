@@ -11,6 +11,54 @@
 <script src="../scripts/global.js"></script>
 <script src="../scripts/account.js"></script>
 <body>
-    
+    <article class="signin">
+        <header>
+            <h2><span id="username"></span></h2>
+        </header>
+            <fieldset>
+                <ul id="fields-list">
+                    <form method="post" action="/edit-self/email">
+                        <div>Email: </div>
+                        <label id="lbl-email"></label>
+                        <input type="button onclick='handleSubmitClick(event)'" data-id="email" class="btn" value="Επεξεργασία" onclick="handleEdit(event)">
+                        <input type="email" name="email" id="email" class="hidden" data-type="input"
+                        required
+                        pattern="[a-zA-Z0-9@\.]{4,40}" 
+                        placeholder="Εισάγετε το email σας">
+                        <button id="submit-email" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                    </form>
+                    <form method="post" action="/edit-self/password">
+                        <div>Κωδικός: </div>
+                        <label id="lbl-password">*********</label>
+                        <input type="button onclick='handleSubmitClick(event)'" data-id="password" class="btn" value="Επεξεργασία" onclick="handleEdit(event)">
+                        <input type="password" name="password" id="password"  class="hidden" data-type="input"
+                        required
+                        pattern=".*{6,40}]"
+                        placeholder="Εισάγετε τον κωδικό σας">
+                        <button id="submit-password" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                    </form>
+                    <form method="post" action="/edit-self/first_name">
+                        <div>Όνομα: </div>
+                        <label id="lbl-first_name"></label>
+                        <input type="button onclick='handleSubmitClick(event)'" data-id="first_name" class="btn" value="Επεξεργασία" onclick="handleEdit(event)">
+                        <input type="text" name="first_name" id="first_name"  class="hidden" data-type="input"
+                        required
+                        pattern=".*{8,28}]"
+                        placeholder="Εισάγετε το όνομα σας">
+                        <button id="submit-first_name" class="btn hidden">Ενημέρωση στοιχείων</button onclick='handleSubmitClick(event)'>
+                    </form>
+                    <form method="post" action="/edit-self/last_name">
+                        <div>Επίθετο: </div>
+                        <label id="lbl-last_name"></label>
+                        <input type="button onclick='handleSubmitClick(event)'" data-id="last_name" class="btn" value="Επεξεργασία" onclick="handleEdit(event)">
+                        <input type="text" name="last_name" id="last_name" class="hidden" data-type="input"
+                        required
+                        pattern=".*{8,48}]"
+                        placeholder="Εισάγετε το επίθετο σας">
+                        <button onclick='handleSubmitClick(event)' id="submit-last_name" class="btn hidden">Ενημέρωση στοιχείων</button>
+                    </form>
+                </ul>
+        </form>
+    </article>
 </body>
 </html>

@@ -56,10 +56,10 @@ const files = {
     }
 }
 
-app.use(express.json({limit: '4mb'}));
+app.use(express.json({limit: '6mb'}));
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.urlencoded({limit: '4mb', extended: true}));
+app.use(express.urlencoded({limit: '6mb', extended: true}));
 
 app.use(authMiddleware);
 app.use(professorMiddleware);
@@ -67,11 +67,15 @@ app.use(adminMiddleware);
 
 function authMiddleware(req, res, next) {
     const query = req.path;
-    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', '/roles', '/fetch-self',
+    const excludedPaths = ['/login', '/', '/classroom', '/logout', '/register', '/roles', '/fetch-self', '/edit-self', '/edit-self/',
     '/fetch-reservations-all', '/admin/reservations/fetch-classrooms', '/classroom', '/fetch-classroom/']
     if (!req.session[sessionObjectName] && !excludedPaths.includes(query) 
     && !query.startsWith('/classroom/') && !query.startsWith('/fetch-classroom/')) {
-        res.redirect('/login?error_code=500')
+        if(req.method.toLowerCase()=='get'){
+            res.redirect('/login?error_code=500')
+            return;
+        }
+        res.send({error: true})
         return;
     }
     next();
@@ -140,6 +144,69 @@ function adminMiddleware(req, res, next){
         next();
     });
 }
+
+app.post('/edit-self/:property', (req, res) => {
+    const property = req.params.property;
+    const value = req.body[property];
+    console.log(property, value)
+    const validProperties = ['email', 'first_name', 'last_name', 'password'];
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.redirect('/account?error_code=510')
+            return;
+        }
+        if(validProperties.includes(property)==false && result[0].user_admin==0){
+            res.redirect('/account?error_code=510')
+            return;
+        }
+        const id = (req.body.id==null || req.body.id==undefined) ? 
+        req.session[sessionObjectName] : req.body.id;
+        if(result[0][property]==value){
+            res.redirect('/account?error_code=508')
+            return;
+        }
+        user.updateSelf(db, id, property, value, (err, result) => {
+            if(err){
+                res.redirect('/account?error_code=510')
+                return;
+            }
+            res.redirect('/account?success=true')
+        });
+    });
+});
+
+app.post('/edit-self/:property/:id', (req, res) => {
+    const property = req.params.property;
+    const value = req.body[property];
+    const validProperties = ['email', 'first_name', 'last_name', 'password'];
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.redirect(`/account/${req.session[sessionObjectName]}?error_code=510`)
+            return;
+        }
+        if(result[0].user_admin==0 && result[0].id!=req.session[sessionObjectName]){
+            res.redirect(`/account/${req.session[sessionObjectName]}?error_code=510`)
+            return;
+        }
+        if(validProperties.includes(property)==false && result[0].user_admin==0){
+            res.redirect(`/account/${req.session[sessionObjectName]}?error_code=510`)
+            return;
+        }
+        const id = (req.params.id==null || req.params.id==undefined) ? 
+        req.session[sessionObjectName] : req.params.id;
+        if(result[0][property]==value){
+            res.redirect(`/account/${req.params.id}?error_code=508`)
+            return;
+        }
+        user.updateSelf(db, id, property, value, (err, result) => {
+            if(err){
+                res.redirect(`/account/${id}?error_code=510`)
+                return;
+            }
+            res.send({success: true})
+        });
+    });
+});
 
 app.get('/roles', (req, reslt) => {
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
@@ -214,11 +281,31 @@ app.get('/professor/lectures', (req, res) => {
 
 app.get('/fetch-self', (req, res) => {
     user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
-        if(err){
+        if(err || result.length==0){
             res.send({error: true})
             return;
         }
         res.send(result);
+    });
+})
+
+app.get('/fetch-self/:id', (req, res) => {
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.send({error: true})
+            return;
+        }
+        if(result[0].user_admin==0 && result[0].id!=req.params.id){
+            res.send({error: true})
+            return;
+        }
+        user.fetchUserId(db, req.params.id, (err, result) => {
+            if(err || result.length==0){
+                res.send({error: true})
+                return;
+            }
+            res.send(result);
+        });
     });
 })
 
@@ -476,6 +563,19 @@ app.post('/register', (req, res) => {
 
 app.get('/account', (req, res) => {
     res.sendFile(files.account);
+})
+app.get('/account/:id', (req, res) => {
+    user.fetchUserId(db, req.session[sessionObjectName], (err, result) => {
+        if(err || result.length==0){
+            res.redirect('/account')
+            return;
+        }
+        if(result[0].user_admin==0 && result[0].id!=req.params.id){
+            res.redirect('/account')
+            return;
+        }
+        res.sendFile(files.account);
+    });
 })
 
 

@@ -101,3 +101,17 @@ const fetchDepartment = (
 }
 
 exports.fetchDepartment = fetchDepartment;
+
+const updateSelf = (
+    db,
+    id,
+    property,
+    value,
+    callback,
+) => {
+    db.query(
+        `update uni.user set ${property} = ? where id = ?`, [value, id], callback
+    )
+}
+
+exports.updateSelf = updateSelf;
