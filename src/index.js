@@ -14,6 +14,7 @@ const port = 3000;
 
 app.use(express.static('public'));
 
+//Cookie options
 app.use(session({
     secret: 'secret-4123e8&&%32kda36212*/423*^32',
     cookie: {
@@ -35,7 +36,7 @@ app.use(session({
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    user: process.env.DB_USER,
+    user: process.env.DB_USER, 
     password: process.env.DB_PASSWORD,
 });
 
@@ -338,7 +339,7 @@ app.get('/fetch-reservations-all', (req, res) => {
             res.status(500).send({error: 'Error'})
             return;
         }
-        res.send(result);
+        res.send(result); 
     });
 })
 app.get('/fetch-lecture/:id', (req, res) => {
@@ -421,6 +422,7 @@ app.get('/admin/reservations/fetch-classrooms', (req, res) => {
         res.send(result);
     });
 });
+
 app.get('/admin/reservations/fetch-lectures', (req, res) => {
     user.fetchDepartment(db, req.session[sessionObjectName], (err1, department) => {
         if(err1){
@@ -708,6 +710,33 @@ app.listen(port, () => {
             constraint unique_person unique (email, first_name, last_name)
             );
         `);
+
+
+            db.promise().query(`select * from user`).then(([rows, fields]) => {
+                if(!rows.some(row => row.email.includes('admin'))){
+                    db.query(
+                        `
+                        insert into user (email, password, first_name, last_name, professor, professor_role, user_admin, reserve_admin, approved, department) values (
+                        "admin1@yahoo.gr", "admin", "admin", "admin", 1, "ΕΤΕΠ", 1, 1, 1, 1)
+                        
+                        `
+                    )
+                    db.query(
+                        `
+                        insert into user (email, password, first_name, last_name, professor, professor_role, user_admin, reserve_admin, approved, department) values (
+                        "admin2@yahoo.gr", "admin", "admin", "admin", 1, "ΕΤΕΠ", 1, 1, 1, 5)
+                        
+                        `
+                    )
+                    db.query(
+                        `
+                        insert into user (email, password, first_name, last_name, professor, professor_role, user_admin, reserve_admin, approved, department) values (
+                        "admin3@yahoo.gr", "admin", "admin", "admin", 1, "ΕΤΕΠ", 1, 1, 1, 6)
+                        
+                        `
+                    )
+                }
+            });
 
     db.query(
         `CREATE TABLE IF NOT EXISTS classroom(

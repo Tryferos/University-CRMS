@@ -1,5 +1,5 @@
 window.addEventListener('load', async(ev) => {
-    const data = await fetchFromServer('fetch-reservations-all');
+    const data = await fetchFromServer('fetch-reservations-all'); 
     populateReservationsTable(data);
     document.getElementById('reservation-count').innerText = data.length;
     const classrooms = await fetchFromServer('admin/reservations/fetch-classrooms');
@@ -158,7 +158,7 @@ async function populateReservationsTable(data){
             <th>Εξάμηνο</th>
             <th>Ημέρα μαθήματος</th>
             <th>Ώρα μαθήματος</th>
-            <th>Διάρκεια διάλεξης</th>
+            <th>Διάρκεια διάλεξης</th> 
             <th>Ώρες μαθήματος</th>
             <th>Τύπος μαθήματος</th>
         <tr>

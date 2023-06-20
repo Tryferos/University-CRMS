@@ -26,7 +26,7 @@ async function postToServer(path, data){
     });
 }
 
-async function fetchFromServer(path){
+async function  fetchFromServer(path){
     return new Promise(async(res, rej) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
